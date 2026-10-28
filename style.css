@@ -62,6 +62,8 @@ a:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
   font-size: 1.1rem;
   color: var(--ink);
   text-decoration: none;
+  display: inline-block;
+  padding: 8px 0;           /* 44px tap target */
 }
 .topbar-links { display: flex; flex-wrap: wrap; gap: 0 20px; }
 .topbar-links a {
@@ -128,7 +130,7 @@ a.card:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
 /* ---------- project page ---------- */
 .project-title { font-size: clamp(2.2rem, 7vw, 4rem); margin-bottom: 0.2em; }
 .project-summary { color: var(--muted); font-size: 1.05rem; }
-.repo-link { color: var(--muted); font-size: 0.85rem; }
+.repo-link { display: inline-block; padding: 12px 0; color: var(--muted); font-size: 0.85rem; }
 
 .row {
   display: grid;
