@@ -8,7 +8,7 @@ The shared rules every page ticket follows. Source: spec #19. The checker is `do
 |---|---|
 | `style.css`, `.nojekyll` | #20 |
 | `index.html`, `images/profile.jpg`, `images/favicon.*`, `images/<project>/thumb.*` (all five, including bap) | #21 |
-| `resume.html`, `files/AustinBreunig_Resume.pdf` | #22 |
+| `resume.html` | #22 |
 | `projects/bap.html`, `images/bap/step-*` | #23 |
 | `docs/contracts/*` | seam lock (read-only for tickets; change by adding a line, not rewriting) |
 
