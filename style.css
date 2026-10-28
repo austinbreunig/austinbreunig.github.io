@@ -1,0 +1,217 @@
+/* Shared stylesheet. Owned by ticket #20.
+   Page tickets may only edit inside their own "page:" section at the bottom. */
+
+:root {
+  --bg: #2a3328;
+  --surface: #344033;
+  --ink: #ece4d2;
+  --muted: #a9b39c;
+  --accent: #d9a441;
+  --accent2: #9fb88a;
+  --line: #4a5946;
+}
+
+/* ---------- base ---------- */
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--ink);
+  font-family: "IBM Plex Mono", monospace;
+  font-size: 0.92rem;
+  line-height: 1.6;
+}
+
+h1, h2, h3 {
+  font-family: "IBM Plex Serif", serif;
+  font-weight: 600;
+  line-height: 1.2;
+  margin: 0 0 0.5em;
+}
+
+p { margin: 0 0 1em; }
+img { max-width: 100%; display: block; }
+a { color: var(--accent); }
+a:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
+
+.wrap { max-width: 1040px; margin: 0 auto; padding: 32px 20px 64px; }
+.muted { color: var(--muted); }
+
+.quote {
+  font-family: "IBM Plex Serif", serif;
+  font-style: italic;
+  border-left: 3px solid var(--accent);
+  margin: 1.5em 0;
+  padding-left: 16px;
+}
+
+/* ---------- top bar ---------- */
+.topbar {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: center;
+  gap: 4px 24px;
+  padding: 12px 20px;
+  border-bottom: 1px solid var(--line);
+}
+.topbar-name {
+  font-family: "IBM Plex Serif", serif;
+  font-weight: 600;
+  font-size: 1.1rem;
+  color: var(--ink);
+  text-decoration: none;
+  display: inline-block;
+  padding: 8px 0;           /* 44px tap target */
+}
+.topbar-links { display: flex; flex-wrap: wrap; gap: 0 20px; }
+.topbar-links a {
+  display: inline-block;
+  padding: 11px 0;          /* 44px+ tap target */
+  text-decoration: none;
+}
+.topbar-links a:hover { text-decoration: underline; }
+
+/* ---------- button ---------- */
+.button {
+  display: inline-block;
+  background: var(--accent);
+  color: var(--bg);
+  font-weight: 600;
+  text-decoration: none;
+  padding: 12px 20px;
+  border-radius: 4px;
+}
+.button:hover { filter: brightness(1.1); }
+.button:focus-visible { outline: 2px solid var(--ink); outline-offset: 3px; }
+
+/* ---------- media box ---------- */
+.media {
+  background: linear-gradient(135deg, var(--surface), var(--line));
+  border: 1px solid var(--line);
+  border-radius: 4px;
+  overflow: hidden;
+}
+.media img, .media iframe { width: 100%; height: 100%; border: 0; object-fit: cover; }
+
+/* ---------- landing: hero ---------- */
+.hero { display: flex; align-items: center; gap: 32px; margin-bottom: 48px; }
+.hero-photo { width: 200px; height: 200px; object-fit: cover; border-radius: 4px; flex: none; }
+.hero-text h1 { font-size: clamp(2rem, 6vw, 3rem); }
+.bio { max-width: 60ch; }
+
+.section-title { color: var(--accent); font-size: 1.5rem; }
+
+/* ---------- landing: cards ---------- */
+.cards { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 20px; }
+.card {
+  display: block;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 4px;
+  padding: 16px;
+  color: var(--ink);
+  text-decoration: none;
+}
+a.card:hover { border-color: var(--accent); }
+.card-thumb { aspect-ratio: 16 / 10; margin-bottom: 12px; }
+.card-title { font-size: 1.15rem; margin-bottom: 0.25em; }
+.card-line { color: var(--muted); margin: 0; }
+.card-soon { color: var(--accent2); margin: 0.5em 0 0; }
+
+@media (max-width: 640px) {
+  .hero { flex-direction: column; text-align: center; }
+  .hero-photo { width: 140px; height: 140px; }
+  .cards { grid-template-columns: 1fr; }
+}
+
+/* ---------- project page ---------- */
+.project-title { font-size: clamp(2.2rem, 7vw, 4rem); margin-bottom: 0.2em; }
+.project-summary { color: var(--muted); font-size: 1.05rem; }
+.repo-link { display: inline-block; padding: 12px 0; color: var(--muted); font-size: 0.85rem; }
+
+.row {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 24px;
+  padding: 32px 0;
+  border-top: 1px solid var(--line);
+}
+section.row { grid-template-columns: 150px 1fr; }  /* Workflow row only: label gutter */
+.row:first-child { border-top: 0; padding-top: 0; }
+.row-label { grid-column: 1; color: var(--accent); font-size: 1.2rem; margin: 0; }
+.row-body { min-width: 0; }
+.free-block { max-width: 70ch; }
+
+.steps { list-style: none; margin: 0; padding: 0; }
+.step {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  column-gap: 32px;
+  grid-auto-rows: min-content;
+  margin-bottom: 40px;
+}
+.step:last-child { margin-bottom: 0; }
+.step-label { grid-column: 1; color: var(--accent2); font-size: 0.8rem; letter-spacing: 0.08em; }
+.step-title { grid-column: 1; font-size: 1.2rem; }
+.step-text { grid-column: 1; }
+.step-visual { grid-column: 2; grid-row: 1 / span 3; aspect-ratio: 16 / 10; }
+.step:nth-child(even) .step-label,
+.step:nth-child(even) .step-title,
+.step:nth-child(even) .step-text { grid-column: 2; }
+.step:nth-child(even) .step-visual { grid-column: 1; }
+
+@media (max-width: 700px) {
+  .row, section.row { grid-template-columns: 1fr; gap: 12px; }
+  .step { grid-template-columns: 1fr; }
+  .step-visual,
+  .step:nth-child(even) .step-label,
+  .step:nth-child(even) .step-title,
+  .step:nth-child(even) .step-text,
+  .step:nth-child(even) .step-visual { grid-column: 1; }
+  .step-visual { grid-row: auto; }
+}
+
+/* ---------- resume ---------- */
+.resume-head { margin-bottom: 32px; }
+.resume-head h1 { font-size: clamp(2.2rem, 7vw, 3.6rem); }
+.contact { color: var(--muted); }
+
+.resume-section { border-top: 1px solid var(--line); padding-top: 24px; margin-bottom: 32px; }
+.resume-section h2 { color: var(--accent); font-size: 1.4rem; }
+
+.job { display: grid; grid-template-columns: 170px 1fr; gap: 24px; padding: 16px 0; }
+.job-gutter { display: flex; flex-direction: column; }
+.job-role { font-family: "IBM Plex Serif", serif; font-weight: 600; color: var(--accent); }
+.job-dates { color: var(--muted); font-size: 0.85rem; }
+.job-body { min-width: 0; }
+.day-to-day { text-transform: uppercase; letter-spacing: 0.08em; font-size: 0.75rem; color: var(--muted); }
+
+.proj-list { list-style: none; margin: 0 0 1em; padding: 0; }
+.proj-list li { position: relative; padding-left: 20px; margin-bottom: 12px; }
+.proj-list li::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0.6em;
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--accent);
+}
+.proj-name { font-family: "IBM Plex Serif", serif; font-weight: 700; }
+.proj-meta { color: var(--muted); font-size: 0.85rem; margin: 0.25em 0 0; }
+.meta-label { color: var(--accent2); }
+
+@media (max-width: 700px) {
+  .job { grid-template-columns: 1fr; gap: 8px; }
+}
+
+/* ---------- page sections (page tickets edit only inside these) ---------- */
+
+/* page: landing */
+
+/* page: resume */
+
+/* page: project */

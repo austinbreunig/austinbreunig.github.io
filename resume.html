@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Austin Breunig - Resume</title>
+<meta name="description" content="Austin Breunig, Geospatial Data Engineer.">
+<link rel="icon" href="images/favicon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600&amp;family=IBM+Plex+Serif:ital,wght@0,600;0,700;1,400&amp;display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<header class="topbar">
+  <a class="topbar-name" href="index.html">Austin Breunig</a>
+  <nav class="topbar-links" aria-label="Main">
+    <a href="#todo" data-placeholder="email">Email</a>
+    <a href="#todo" data-placeholder="LinkedIn URL">LinkedIn</a>
+    <a href="#todo" data-placeholder="GitHub URL">GitHub</a>
+    <a href="resume.html">Resume</a>
+  </nav>
+</header>
+<main class="wrap">
+  <header class="resume-head">
+    <h1>Austin Breunig</h1>
+    <p class="contact"><a href="tel:+17202981625">720-298-1625</a> | <a href="mailto:abreunig9@gmail.com">abreunig9@gmail.com</a> | Nederland, CO</p>
+  </header>
+  <section class="resume-section">
+    <h2>Experience</h2>
+    <div class="job">
+      <div class="job-gutter">
+        <span class="job-role">Geospatial Data Engineer</span>
+        <span class="job-org">Cotality · Remote</span>
+        <span class="job-dates">Aug 2022 – Present</span>
+      </div>
+      <div class="job-body">
+        <p>Python data engineer providing full e2e scaling of geospatial data pipelines serving Cotality’s Location Intelligence and Hazard Science Initiatives.</p>
+        <p><span class="day-to-day">Day-to-day</span> Python · GDAL · BigQuery · GCS · Docker · Jenkins · Carto · Jupyter Notebooks</p>
+        <ul class="proj-list">
+          <li>
+            <span class="proj-name">Superparcels</span> — a parcel-boundary product delineating same-ownership parcels in nearby proximity. Clients use it to identify growth areas, site-selection opportunities, and optimize ownership negotiations.
+            <p class="proj-meta"><span class="meta-label">Tools:</span> Apache Beam, Dataflow, GeoPandas, Shapely, Numpy</p>
+            <p class="proj-meta"><span class="meta-label">Method:</span> DBSCAN clustering using common ownership at nationwide scale.</p>
+          </li>
+          <li>
+            <span class="proj-name">LiDAR footprint extraction</span> — An extraction process for supplementing missing structure data from vendors and providing highly accurate footprint vectors for downstream property risk datasets.
+            <p class="proj-meta"><span class="meta-label">Tools:</span> PDAL, Xarray, scikit-learn (RANSAC), Ray on Vertex AI</p>
+            <p class="proj-meta"><span class="meta-label">Method:</span> Iterative-Closest-Point (ICP) for DEM and Ortho alignment, OBIA procedure consisting of NDVI and HAG gates, geometric gates, and RANSAC-based point-cloud cleaning with interpolated roof slope/extent.</p>
+          </li>
+          <li>
+            <span class="proj-name">Building footprint regularization</span> — cleans irregular vendor (Vexcel) footprints across ~200M structures, feeding every downstream product that needs accurate footprints (flood elevation, wildfire proximity).
+            <p class="proj-meta"><span class="meta-label">Tools:</span> PySpark, Apache Sedona, Dataproc</p>
+            <p class="proj-meta"><span class="meta-label">Method:</span> geometry regularization pipeline run at national scale.</p>
+          </li>
+          <li>
+            <span class="proj-name">100-year flood elevation pipeline</span> — the core flood-zone elevation dataset behind Cotality's Flood Risk Score and the base for the 500-year product, built from raw FEMA data nationwide.
+            <p class="proj-meta"><span class="meta-label">Tools:</span> Dask, Airflow, GeoPandas, Rasterio, SciPy</p>
+            <p class="proj-meta"><span class="meta-label">Method:</span> cleans and standardizes FEMA flood zones; gives every zone vertex a reliable elevation (interpolated between legally required BFE cross-sections, or from a curated 1m DEM), then builds a Delaunay TIN so downstream scoring can look up elevation anywhere.</p>
+          </li>
+          <li>
+            <span class="proj-name">500-year floodplain expansion</span> — extends FEMA's 100-year flood risk zones to 500-year risk nationwide.
+            <p class="proj-meta"><span class="meta-label">Tools:</span> Dataflow, STRtree, GeoPandas, Rasterio</p>
+            <p class="proj-meta"><span class="meta-label">Method:</span> interpolates elevation for ~500M vertices against hydrologist-defined heuristics via spatial-index queries; partitioned by FIPS code to correct for county-size load skew.</p>
+          </li>
+          <li>
+            <span class="proj-name">Coastal Storm Risk</span> — storm-surge risk scores used by insurers across high-risk coastal areas, rebuilt at 10m resolution (up from 30m) for the East and Gulf coasts, California, and Hawaii, with a new 1–100 score alongside the original 1–5.
+            <p class="proj-meta"><span class="meta-label">Tools:</span> scikit-image, Dask, GeoPandas, Rasterio, SciPy</p>
+            <p class="proj-meta"><span class="meta-label">Method:</span> ported the 1–5 score to an automated Python build with no regressions; built the 1–100 score from 5 NOAA storm-surge rasters (one per hurricane category), smoothed with morphological closing, scored with hydrological rules that differ for northern and southern regions plus county-level hurricane probabilities from university research; packaged as a CLI for operations' annual build.</p>
+          </li>
+        </ul>
+        <p><span class="day-to-day">Other projects</span></p>
+        <ul>
+          <li>Integrated an in-house Valhalla routing service, built on current OpenStreetMap roads, into fire-station response-time modeling, giving more accurate drive-time estimates for property-level fire resilience scores.</li>
+          <li>Built owner-name standardization with BigQuery AI functions to improve ownership linkage.</li>
+        </ul>
+      </div>
+    </div>
+    <div class="job">
+      <div class="job-gutter">
+        <span class="job-role">Geospatial Analyst</span>
+        <span class="job-org">Cotality · Boulder, CO</span>
+        <span class="job-dates">Aug 2021 – Aug 2022</span>
+      </div>
+      <div class="job-body">
+        <p>Python specialist providing automation rebuilds on legacy geospatial workflows for Cotality’s GIS operations team</p>
+        <p><span class="day-to-day">Day-to-day</span> Python · ArcGIS Pro · Jupyter Notebooks</p>
+        <ul class="proj-list">
+          <li>
+            <span class="proj-name">Fire, Crime, and Premium tax</span> — automated the quarterly release of these three layers, cutting each build from 2 weeks to 3 days.
+            <p class="proj-meta"><span class="meta-label">Tools:</span> geopandas, pandas, arcpy</p>
+            <p class="proj-meta"><span class="meta-label">Method:</span> Fire used a combination of geopandas and arcpy tooling to combine roughly five manual procedures into a single script. Crime connected external API source data that was spatially aggregated nationwide. Premium Tax ran complex filtering and joining steps to combine five different sources and allocate three different product derivatives.</p>
+          </li>
+          <li>
+            <span class="proj-name">DSM POC</span> — built nDSM workflows from dense urban LiDAR flyovers of major US cities to measure building and first-floor heights, now used by all of Cotality's flood products.
+            <p class="proj-meta"><span class="meta-label">Tools:</span> Global Mapper, Rasterio, GeoPandas, GDAL</p>
+            <p class="proj-meta"><span class="meta-label">Method:</span> LiDAR classification to segment ground vs. height-above-ground. Ran bilinear interpolation on point clouds to build nDSM.</p>
+          </li>
+        </ul>
+      </div>
+    </div>
+    <div class="job">
+      <div class="job-gutter">
+        <span class="job-role">Geospatial Intern</span>
+        <span class="job-org">Cotality · Boulder, CO</span>
+        <span class="job-dates">Jun 2021 – Aug 2021</span>
+      </div>
+      <div class="job-body">
+        <p>Spearheading the R&amp;D initiative for the integration of higher resolution Digital Elevation Models in Cotality’s Hazard Science Products</p>
+        <p><span class="day-to-day">Day-to-day</span> Python · ArcGIS Pro · Jupyter Notebooks</p>
+        <ul class="proj-list">
+          <li>
+            <span class="proj-name">DEM Comparative Analysis</span> — evaluated 10m vs. 1m DEMs and presented the results company-wide with Kepler and Carto visualizations.
+            <p class="proj-meta"><span class="meta-label">Tools:</span> ArcGIS Pro, StoryMaps, GeoPandas, Kepler, Carto, Global Mapper</p>
+            <p class="proj-meta"><span class="meta-label">Method:</span> reran flood models extracting 1m DEMs, extracted levee height comparative accuracies, and prototyped building height extraction using self-made nDSMs.</p>
+          </li>
+        </ul>
+      </div>
+    </div>
+    <div class="job">
+      <div class="job-gutter">
+        <span class="job-role">GIS Intern</span>
+        <span class="job-org">National Park Service · Glen Canyon, Page, AZ</span>
+        <span class="job-dates">Aug 2020 – Mar 2021</span>
+      </div>
+      <div class="job-body">
+        <p>Assisting management efforts to understand desertification impacts on critical habitats and cultural resources for the National Park Service</p>
+        <p><span class="day-to-day">Day-to-day</span> ArcGIS Pro · Python</p>
+        <ul class="proj-list">
+          <li>
+            <span class="proj-name">Environmental and Cultural Impact Analysis</span> — ran a park-wide zonal-statistic analysis of five-year NDVI change across 25+ vegetation types; management used it to prioritize vegetation loss near critical cultural resource areas.
+            <p class="proj-meta"><span class="meta-label">Tools:</span> ArcGIS Pro</p>
+            <p class="proj-meta"><span class="meta-label">Method:</span> extracted and filtered Landsat imagery organized data into a geodatabase, and ran the zonal statistic geoprocessing tool. Curated maps visualizing the breakdown of desertification per vegetation type.</p>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </section>
+  <section class="resume-section">
+    <h2>Education</h2>
+    <div class="job">
+      <div class="job-gutter">
+        <span class="job-role">Master of GIS (MGIS)</span>
+        <span class="job-org">Penn State University · 2022</span>
+      </div>
+      <div class="job-body">Capstone: Python package for land-cover classification of segmented imagery by using spectral correlation.</div>
+    </div>
+    <div class="job">
+      <div class="job-gutter">
+        <span class="job-role">B.A. Economics, Minor in Anthropology</span>
+        <span class="job-org">Fort Lewis College · 2015</span>
+      </div>
+      <div class="job-body"></div>
+    </div>
+  </section>
+</main>
+</body>
+</html>
