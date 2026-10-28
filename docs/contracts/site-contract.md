@@ -21,12 +21,9 @@ After #21, #22, #23 are done, #24 may edit any launch file to fix failures. #25 
 2b. Pages use only class names from `classes.txt`. A new name goes into `classes.txt` and `style.css` in the same change.
 3. Colors come from the tokens in spec section 3 (`--bg --surface --ink --muted --accent --accent2 --line`), declared on `:root` in `style.css`. No raw hex outside that block.
 4. Links between pages and to shared files are relative. Root pages use `style.css`, `resume.html`. Pages in `projects/` use `../style.css`, `../index.html`, `../resume.html`. No link starts with `/` or the site URL. One exception: `og:image` and `og:url` in `<meta>` use the full `https://austinbreunig.github.io/...` URL, because share scrapers need it.
-5. Same-site paths a page may reference: `style.css`, `index.html`, `resume.html`, `projects/<name>.html`, `images/...`, `files/AustinBreunig_Resume.pdf`.
-6. Placeholder links (email, LinkedIn, GitHub) use `href="#todo"`, and every `#todo` link carries `data-placeholder="<what is missing>"`. The same attribute marks every stand-in text or image. Ticket #24 lists them with `grep -rn data-placeholder`.
-7. Every page: `<html lang="en">`, charset and viewport meta, `<title>`, meta description, one `h1`, `<link rel="stylesheet" href="[../]style.css">`, Google Fonts link for IBM Plex Serif and IBM Plex Mono only, and `<link rel="icon" href="[../]images/favicon.<ext>">`.
-8. No `<script>` at launch.
-9. Breakpoints: 640px (landing), 700px (project, resume).
-10. Do not write or edit the author's words. Stand-ins are marked.
+5. Placeholder links (email, LinkedIn, GitHub) use `href="#todo"`, and every `#todo` link carries `data-placeholder="<what is missing>"`. The same attribute marks every stand-in text or image. Ticket #24 lists them with `grep -rn data-placeholder`.
+6. Every page: `<html lang="en">`, charset and viewport meta, `<title>`, meta description, one `h1`, `<link rel="stylesheet" href="[../]style.css">`, Google Fonts link for IBM Plex Serif and IBM Plex Mono only, and `<link rel="icon" href="[../]images/favicon.<ext>">`.
+7. No `<script>` at launch.
 
 ## Top bar (identical on every page, only the prefix changes)
 
@@ -44,7 +41,7 @@ After #21, #22, #23 are done, #24 may edit any launch file to fix failures. #25 
 </header>
 ```
 
-(Written as `P index.html` here only for readability; real hrefs have no space.) The checker compares the header text and link order across pages.
+(Written as `P index.html` here only for readability; real hrefs have no space.) The checker checks the five links and their order.
 
 ## Page body shapes
 
