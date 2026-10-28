@@ -8,7 +8,6 @@ Issues and specs for this repo live as GitHub issues in `austinbreunig/austinbre
 - Read an issue: `gh issue view <number> --comments`
 - Comment: `gh issue comment <number> --body "..."`
 - Close: `gh issue close <number>`
-- Triage state is recorded as labels (see `triage-labels.md`).
 
 ## When a skill says "publish to the issue tracker"
 
