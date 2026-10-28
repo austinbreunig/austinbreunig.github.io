@@ -1,0 +1,16 @@
+<!-- check-as: projects/bad.html -->
+<!-- Must fail. Expected problems: no lang, inline style, unknown class, root-absolute link, missing ../ prefix, two h1, img without alt, script, no description. -->
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>bad</title>
+<link rel="stylesheet" href="style.css">
+<style>body{color:red}</style>
+</head>
+<body>
+<h1 style="color:red">One</h1><h1>Two</h1>
+<div class="fancy-new-thing"><a href="/resume.html">r</a><img src="x.jpg"></div>
+<script>1</script>
+</body>
+</html>
