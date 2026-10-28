@@ -22,6 +22,8 @@ class Page(HTMLParser):
         self.inline_style = self.script = self.in_bar = 0
         self.imgs_no_alt = 0
         self.h1 = 0
+        self.icon = self.fonts = False
+        self.todo_no_ph = 0
 
     def handle_starttag(self, tag, attrs):
         a = dict(attrs)
@@ -41,6 +43,12 @@ class Page(HTMLParser):
             self.script += 1
         if tag == "img" and "alt" not in a:
             self.imgs_no_alt += 1
+        if tag == "link" and "icon" in (a.get("rel") or ""):
+            self.icon = True
+        if tag == "link" and "fonts.googleapis.com" in a.get("href", ""):
+            self.fonts = True
+        if a.get("href") == "#todo" and "data-placeholder" not in a:
+            self.todo_no_ph += 1
         self.classes.update((a.get("class") or "").split())
         if tag == "link" and a.get("rel") == "stylesheet" and a.get("href", "").startswith("http"):
             return
@@ -71,6 +79,9 @@ def check(path, virtual, files):
     if p.inline_style: bad.append("inline <style> or style= attribute")
     if p.script: bad.append("<script> not allowed at launch")
     if p.imgs_no_alt: bad.append("img without alt")
+    if not p.icon: bad.append('missing <link rel="icon">')
+    if not p.fonts: bad.append("missing Google Fonts link")
+    if p.todo_no_ph: bad.append("#todo link without data-placeholder")
     for c in sorted(p.classes - CLASSES):
         bad.append(f"class not in classes.txt: {c}")
     if (prefix + "style.css") not in [h for _, h in p.links]:
