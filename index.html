@@ -1,22 +1,71 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Austin Breunig - Portfolio</title>
-    <style>
-        body { font-family: Calibri, sans-serif; text-align: center; margin: 50px; }
-        h1 { color: #333; }
-        a { color: blue; text-decoration: none; }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Austin Breunig</title>
+<meta name="description" content="Austin Breunig is a geospatial engineer who designs flexible, reliable data pipelines.">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Austin Breunig">
+<meta property="og:description" content="Austin Breunig is a geospatial engineer who designs flexible, reliable data pipelines.">
+<meta property="og:image" content="https://austinbreunig.github.io/images/profile.jpg">
+<meta property="og:url" content="https://austinbreunig.github.io/">
+<link rel="icon" href="images/favicon.png" data-placeholder="favicon image">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono&family=IBM+Plex+Serif:wght@600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <h1>Austin Breunig</h1>
-    <p>Hello, I'm a geospatial engineer specializing in automating geospatial workflows. Project list:</p>
-    <ul>
-        <li><a href="https://github.com/yourusername/project1">Project 1</a></li>
-        <li><a href="https://github.com/yourusername/project2">Project 2</a></li>
-    </ul>
-    <p>Find me on <a href="https://www.linkedin.com/in/yourprofile/">LinkedIn</a></p>
+<header class="topbar">
+  <a class="topbar-name" href="index.html">Austin Breunig</a>
+  <nav class="topbar-links" aria-label="Main">
+    <a href="#todo" data-placeholder="email">Email</a>
+    <a href="#todo" data-placeholder="LinkedIn URL">LinkedIn</a>
+    <a href="#todo" data-placeholder="GitHub URL">GitHub</a>
+    <a href="resume.html">Resume</a>
+  </nav>
+</header>
+<main class="wrap">
+  <section class="hero">
+    <img class="hero-photo" src="images/profile.jpg" alt="Photo of Austin Breunig">
+    <div class="hero-text">
+      <h1>Austin Breunig</h1>
+      <p class="bio">I'm a geospatial engineer who turns small ideas into creative, scalable solutions by designing flexible, reliable data pipelines. I cut noise, clutter, and complexity from existing workflows and rebuild them to be clean, easy to change, and built to last. Away from the screen, I push myself outdoors, climbing and bikepacking in search of adventure.</p>
+    </div>
+  </section>
+  <h2 class="section-title">Projects</h2>
+  <div class="cards">
+    <a class="card" href="projects/bap.html">
+      <div class="card-thumb media" data-placeholder="thumbnail"><img src="images/bap/thumb.svg" alt=""></div>
+      <h3 class="card-title">bap</h3>
+      <p class="card-line">BAP (Big Ass Polygons) clusters nearby polygons and wraps each cluster in a tight, square-edged boundary.</p>
+    </a>
+    <div class="card">
+      <div class="card-thumb media" data-placeholder="thumbnail"></div>
+      <h3 class="card-title">conservation-dashboard</h3>
+      <p class="card-line" data-placeholder="one-line summary">TBD</p>
+      <p class="card-soon">Coming soon</p>
+    </div>
+    <div class="card">
+      <div class="card-thumb media" data-placeholder="thumbnail"></div>
+      <h3 class="card-title">maply</h3>
+      <p class="card-line" data-placeholder="one-line summary">TBD</p>
+      <p class="card-soon">Coming soon</p>
+    </div>
+    <div class="card">
+      <div class="card-thumb media" data-placeholder="thumbnail"></div>
+      <h3 class="card-title">plumber</h3>
+      <p class="card-line" data-placeholder="one-line summary">TBD</p>
+      <p class="card-soon">Coming soon</p>
+    </div>
+    <div class="card">
+      <div class="card-thumb media" data-placeholder="thumbnail"></div>
+      <h3 class="card-title">skills</h3>
+      <p class="card-line" data-placeholder="one-line summary">TBD</p>
+      <p class="card-soon">Coming soon</p>
+    </div>
+  </div>
+</main>
 </body>
 </html>
