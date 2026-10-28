@@ -68,7 +68,7 @@ a:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
 .topbar-links { display: flex; flex-wrap: wrap; gap: 0 20px; }
 .topbar-links a {
   display: inline-block;
-  padding: 10px 0;          /* 44px tap target */
+  padding: 11px 0;          /* 44px+ tap target */
   text-decoration: none;
 }
 .topbar-links a:hover { text-decoration: underline; }
@@ -115,7 +115,6 @@ a:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
   text-decoration: none;
 }
 a.card:hover { border-color: var(--accent); }
-a.card:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
 .card-thumb { aspect-ratio: 16 / 10; margin-bottom: 12px; }
 .card-title { font-size: 1.15rem; margin-bottom: 0.25em; }
 .card-line { color: var(--muted); margin: 0; }
@@ -134,14 +133,15 @@ a.card:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
 
 .row {
   display: grid;
-  grid-template-columns: 150px 1fr;
+  grid-template-columns: 1fr;
   gap: 24px;
   padding: 32px 0;
   border-top: 1px solid var(--line);
 }
+section.row { grid-template-columns: 150px 1fr; }  /* Workflow row only: label gutter */
 .row:first-child { border-top: 0; padding-top: 0; }
 .row-label { grid-column: 1; color: var(--accent); font-size: 1.2rem; margin: 0; }
-.row-body { grid-column: 2; min-width: 0; }
+.row-body { min-width: 0; }
 .free-block { max-width: 70ch; }
 
 .steps { list-style: none; margin: 0; padding: 0; }
@@ -163,8 +163,7 @@ a.card:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
 .step:nth-child(even) .step-visual { grid-column: 1; }
 
 @media (max-width: 700px) {
-  .row { grid-template-columns: 1fr; gap: 12px; }
-  .row-label, .row-body { grid-column: 1; }
+  .row, section.row { grid-template-columns: 1fr; gap: 12px; }
   .step { grid-template-columns: 1fr; }
   .step-visual,
   .step:nth-child(even) .step-label,
@@ -185,7 +184,6 @@ a.card:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
 .job { display: grid; grid-template-columns: 170px 1fr; gap: 24px; padding: 16px 0; }
 .job-gutter { display: flex; flex-direction: column; }
 .job-role { font-family: "IBM Plex Serif", serif; font-weight: 600; color: var(--accent); }
-.job-org { color: var(--ink); }
 .job-dates { color: var(--muted); font-size: 0.85rem; }
 .job-body { min-width: 0; }
 .day-to-day { text-transform: uppercase; letter-spacing: 0.08em; font-size: 0.75rem; color: var(--muted); }
