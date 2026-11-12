@@ -5,19 +5,18 @@ const fs = require("fs");
 const path = require("path");
 const vm = require("vm");
 
-function el(attrs) {
+function el(attrs, sets) {
   const a = Object.assign({}, attrs);
   return {
     hidden: false, style: {}, listeners: {},
-    getAttribute: (k) => a[k], setAttribute: (k, v) => { a[k] = v; this_sets.push(v); },
+    getAttribute: (k) => a[k], setAttribute: (k, v) => { a[k] = v; sets.push(v); },
     addEventListener(t, f) { this.listeners[t] = f; },
   };
 }
-let this_sets;
 
 function run() {
-  this_sets = [];
-  const frame = el({}), iframe = el({ src: "../visuals/x.html" }), fallback = el({}), reload = el({});
+  const sets = [];
+  const frame = el({}, sets), iframe = el({ src: "../visuals/x.html" }, sets), fallback = el({}, sets), reload = el({}, sets);
   iframe.contentWindow = {};
   frame.querySelector = () => iframe;
   const figure = { querySelector: (s) => ({ ".visual-frame": frame, ".visual-fallback": fallback, ".visual-reload": reload })[s] };
@@ -30,7 +29,7 @@ function run() {
     Number,
   };
   vm.runInNewContext(fs.readFileSync(path.join(__dirname, "../../embed.js"), "utf8"), ctx);
-  return { frame, iframe, fallback, reload, onMessage, timers };
+  return { frame, iframe, fallback, reload, onMessage, timers, sets };
 }
 
 // 4 s timeout shows fallback
@@ -42,7 +41,7 @@ assert(t.frame.hidden && !t.fallback.hidden);
 // Reload restores the frame, resets src, restarts the timer
 t.reload.listeners.click();
 assert(!t.frame.hidden && t.fallback.hidden);
-assert.deepStrictEqual(this_sets, ["../visuals/x.html"]);
+assert.deepStrictEqual(t.sets, ["../visuals/x.html"]);
 assert.strictEqual(t.timers.length, 2);
 
 // ready cancels the timer; height sets px; foreign source and bad px ignored

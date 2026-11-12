@@ -23,6 +23,7 @@
     function reload() {
       frame.hidden = false;
       fallback.hidden = true;
+      // Setting src to itself makes the browser load the iframe again.
       iframe.setAttribute("src", iframe.getAttribute("src"));
       start();
     }

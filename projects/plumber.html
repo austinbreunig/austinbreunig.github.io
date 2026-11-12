@@ -39,7 +39,8 @@
   <section class="row">
     <h2 class="row-label">The idea</h2>
     <div class="row-body">
-      <p data-placeholder="The idea: the phase contract and the adapter shim, in the author's words">The idea text goes here. Not written yet.</p>
+      <p>Shims or adapters are used to take any codebase and make it compatible with plumber.</p>
+      <p data-placeholder="The idea: the phase contract, in the author's words">The idea text goes here. Not written yet.</p>
       <pre class="code-block"><code>run(gdf, **params) -&gt; gdf</code></pre>
       <div class="widget" id="pipeline">
         <ul class="widget-fallback">
@@ -75,7 +76,7 @@ execution:
       <div class="widget" id="strategy">
         <ul class="widget-fallback">
           <li><code>strategy: local</code>: one partition holds rows 1 2 3 4 5 6; they come back as 1 2 3 4 5 6.</li>
-          <li><code>strategy: localmp</code>: three partitions get [1 4], [2 5], [3 6]; workers run them; the rows come back as 1 2 3 4 5 6.</li>
+          <li><code>strategy: localmp</code>: three partitions get the rows; workers run them; the rows come back as 1 2 3 4 5 6.</li>
         </ul>
       </div>
       <div class="media" data-placeholder="screenshot: plumber run --strategy localmp --worker-count 4 log with Phase headings"></div>
@@ -144,14 +145,17 @@ var CHECKS = {
   "bad-crs": { status: "WARN", message: "The data is in degrees (EPSG:4326) but distance is in metres. It runs, but the geometry is wrong." }
 };
 
+function lookup(table, key) {
+  if (!Object.prototype.hasOwnProperty.call(table, key)) throw new Error("unknown key: " + key);
+  return table[key];
+}
+
 function phaseInfo(name) {
-  if (!Object.prototype.hasOwnProperty.call(PHASES, name)) throw new Error("unknown phase: " + name);
-  return PHASES[name];
+  return lookup(PHASES, name);
 }
 
 function checkResult(choice) {
-  if (!Object.prototype.hasOwnProperty.call(CHECKS, choice)) throw new Error("unknown choice: " + choice);
-  return CHECKS[choice];
+  return lookup(CHECKS, choice);
 }
 
 function strategyRows(strategy, rows, partitions) {

@@ -216,10 +216,6 @@ section.row { grid-template-columns: 150px 1fr; }  /* Workflow row only: label g
 
 /* page: project */
 
-/* page: plumber */
-#pipeline .code-block, #strategy .code-block { margin-top: 12px; white-space: pre-wrap; }
-#strategy .widget-partition { margin-bottom: 8px; }
-
 /* ---------- cycle 2: rows, code, pairs, status, widgets, visuals (spec #26) ---------- */
 .code-block {
   margin: 0 0 1em;
@@ -245,7 +241,7 @@ section.row { grid-template-columns: 150px 1fr; }  /* Workflow row only: label g
   border-radius: 4px;
 }
 .widget-controls { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 12px; }
-.widget-controls button {
+.widget-controls button, .strip-step, .visual-reload {
   padding: 8px 14px;
   background: var(--bg);
   color: var(--ink);
@@ -255,8 +251,8 @@ section.row { grid-template-columns: 150px 1fr; }  /* Workflow row only: label g
   cursor: pointer;
 }
 .widget-controls button:hover { border-color: var(--accent); }
-.widget-controls button:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
-.widget-controls button[aria-pressed="true"] { border-color: var(--accent); color: var(--accent); }
+.widget-controls button:focus-visible, .strip-step:focus-visible, .visual-reload:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+.widget-controls button[aria-pressed="true"], .strip-step[aria-pressed="true"] { border-color: var(--accent); color: var(--accent); }
 .widget-out { margin: 0; min-height: 1.6em; }
 .widget-fallback { margin: 0; padding-left: 1.2em; }
 
@@ -280,30 +276,8 @@ section.row { grid-template-columns: 150px 1fr; }  /* Workflow row only: label g
 }
 
 .strip { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 1em; }
-.strip-step {
-  padding: 6px 12px;
-  background: var(--surface);
-  border: 1px solid var(--line);
-  border-radius: 4px;
-  font: inherit;
-  color: var(--ink);
-  cursor: pointer;
-}
-.strip-step[aria-pressed="true"] { border-color: var(--accent); color: var(--accent); }
-.strip-step:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
-
 .visual { margin: 0 0 1em; }
 .visual-bar { display: flex; flex-wrap: wrap; gap: 12px; align-items: center; margin-bottom: 8px; }
-.visual-reload {
-  padding: 8px 14px;
-  background: var(--surface);
-  color: var(--ink);
-  border: 1px solid var(--line);
-  border-radius: 4px;
-  font: inherit;
-  cursor: pointer;
-}
-.visual-reload:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
 .visual-frame { min-height: 260px; }
 .visual-frame iframe { display: block; width: 100%; min-height: 260px; border: 0; }
 .visual-fallback { color: var(--muted); }
@@ -315,6 +289,10 @@ section.row { grid-template-columns: 150px 1fr; }  /* Workflow row only: label g
 @media (prefers-reduced-motion: reduce) {
   .widget-row { transition: none; }
 }
+
+/* page: plumber */
+#pipeline .code-block, #strategy .code-block { margin-top: 12px; white-space: pre-wrap; }
+#strategy .widget-partition { margin-bottom: 8px; }
 
 /* page: embed */
 .visual-frame[hidden], .visual-fallback[hidden] { display: none; }

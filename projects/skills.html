@@ -40,7 +40,7 @@
     <div class="row-body">
       <div class="widget">
         <div class="strip" id="cycle-strip"></div>
-        <p class="widget-out" id="cycle-out"></p>
+        <p class="widget-out" id="cycle-out" data-placeholder="one-line note per cycle step, in the author's words"></p>
         <ul class="widget-fallback" id="cycle-list">
           <li>Start (human step)</li>
           <li>Route (human step)</li>
@@ -48,7 +48,6 @@
           <li>Build chain</li>
           <li>Ramp tail</li>
           <li>Verdict (human step)</li>
-          <li>Retro</li>
         </ul>
       </div>
     </div>
@@ -68,24 +67,17 @@
   <section class="row">
     <h2 class="row-label">Lifecycle</h2>
     <div class="row-body">
-      <p><code>/lifecycle</code>: the navigator. Run it at the start of every fresh session.</p>
-      <p><code>mindful</code>: cuts forced or unneeded complexity from the shape of the work.</p>
-      <p><code>seam-lock</code>: commits contracts, stubs and fixtures, then attacks the split.</p>
-      <p><code>ramp</code>: plans how to pressure-test a built pipeline.</p>
-      <p><code>cycle-retro</code>: measures the cycle and proposes workflow edits.</p>
+      <p data-placeholder="one line each for lifecycle's 5 skills: /lifecycle, mindful, seam-lock, ramp, cycle-retro">One line each goes here. Not written yet.</p>
       <div class="pair">
-        <div class="pair-item media" data-placeholder="screenshot: a /lifecycle run stopping at a human step, showing the next-command line"></div>
-        <div class="pair-item media" data-placeholder="screenshot: a /brief output, private repo names blurred"></div>
+        <div class="pair-item media" data-placeholder="screenshot: a /lifecycle run stopping at a human step, showing the next-command line. No private repo names, paths or ticket titles may be visible"></div>
+        <div class="pair-item media" data-placeholder="screenshot: a /brief output. No private repo names, paths or ticket titles may be visible"></div>
       </div>
     </div>
   </section>
   <section class="row">
     <h2 class="row-label">Productivity</h2>
     <div class="row-body">
-      <p><code>/hq</code>: the home screen for a private HQ repo. Sets it up and connects repos.</p>
-      <p><code>/brief</code>: shows where every connected repo stands.</p>
-      <p><code>/eod</code>: wraps up the day and writes a summary to the HQ repo.</p>
-      <p><code>/jot</code>: saves a quick note about the session.</p>
+      <p data-placeholder="one line each for /hq, /brief, /eod, /jot">One line each goes here. Not written yet.</p>
     </div>
   </section>
   <section class="row">
@@ -118,15 +110,14 @@
   </div>
 </main>
 <script>
-var CYCLE_STEPS = [{name: "Start", human: true}, {name: "Route", human: true}, {name: "Spec chain", human: false}, {name: "Build chain", human: false}, {name: "Ramp tail", human: false}, {name: "Verdict", human: true}, {name: "Retro", human: false}];
+var CYCLE_STEPS = [{name: "Start", human: true}, {name: "Route", human: true}, {name: "Spec chain", human: false}, {name: "Build chain", human: false}, {name: "Ramp tail", human: false}, {name: "Verdict", human: true}];
 
 function stepLabel(step) {
   return step.human ? step.name + " (human step)" : step.name;
 }
 
 function stepNote(step) {
-  if (step.human) return step.name + ": a human step. Only you can decide this.";
-  return step.name + ": an agent step. /lifecycle runs it on its own.";
+  return step.name + ": note goes here. Not written yet.";
 }
 
 function showStrip() {

@@ -10,13 +10,15 @@ The shared rules every page ticket follows. Source: spec #19. The checker is `do
 | `index.html`, `images/profile.jpg`, `images/favicon.*`, `images/<project>/thumb.*` (all five, including bap) | #21 |
 | `resume.html` | #22 |
 | `projects/bap.html`, `images/bap/step-*` | #23 |
+| `embed.js`, `visuals/*` | cycle 2 (see `cycle2-seams.md`) |
+| `projects/plumber.html`, `projects/skills.html` | cycle 2 (see `cycle2-seams.md`) |
 | `docs/contracts/*` | seam lock (read-only for tickets; change by adding a line, not rewriting) |
 
 After #21, #22, #23 are done, #24 may edit any launch file to fix failures. #25 only merges.
 
 ## Rules
 
-1. Only `style.css` holds CSS. No `<style>`, no `style=""` The one exception: guided visuals (`visuals/*.html`) are separate pages inside an iframe and may carry their own `<style>` and `<script>`. The checker skips `visuals/`.
+1. Only `style.css` holds CSS. No `<style>`, no `style=""`. The one exception: guided visuals (`visuals/*.html`) are separate pages inside an iframe and may carry their own `<style>` and `<script>`. The checker skips `visuals/`.
 2. #20 ships CSS for every class in `classes.txt`, using the spec values. If a page ticket finds a mismatch, it edits `style.css` only inside a section headed `/* page: <name> */` (add one if missing) and never touches #20's shared sections.
 2b. Pages use only class names from `classes.txt`. A new name goes into `classes.txt` and `style.css` in the same change.
 3. Colors come from the tokens in spec section 3 (`--bg --surface --ink --muted --accent --accent2 --line`), declared on `:root` in `style.css`. No raw hex outside that block.
@@ -64,7 +66,7 @@ Landing card (one per project, five total). Linked card: the `<a class="card">` 
 
 Project page (`projects/<name>.html`): `h1.project-title`, `p.project-summary`, `a.repo-link` in the first row; then `div.row > div.row-body.free-block`; then labeled rows (see Labeled rows below, or `ol.steps` as in cycle 1); then a last row with `a.button`. A step is `span.step-label` ("STEP 1"), `h3.step-title`, `p.step-text`, and `div.step-visual.media`. The even-step flip is CSS (`.step:nth-child(even)`), not markup. See `fixtures/good-project.html`.
 
-Labeled rows without steps (cycle 2 project pages): `section.row > h2.row-label + div.row-body`. The body holds any of: `p`; `div.pair` of two `div.pair-item.media` (screenshots side by side, stacked on a phone); `pre.code-block > code`; `figure.visual` (guided visual embed); `div.widget` (`div.widget-controls`, `p.widget-out`, plain `ul.widget-fallback` for no JavaScript); `div.strip` of `span.strip-step`; `p.status-line`. A stand-in is the same element with `data-placeholder="<what is missing>"`. Examples: `fixtures/good-embed-project.html`, `fixtures/good-widget-project.html`.
+Labeled rows without steps (cycle 2 project pages): `section.row > h2.row-label + div.row-body`. The body holds any of: `p`; `div.pair` of two `div.pair-item.media` (screenshots side by side, stacked on a phone); `pre.code-block > code`; `figure.visual` (guided visual embed); `div.widget` (`div.widget-controls`, `p.widget-out`, plain `ul.widget-fallback` for no JavaScript); `div.strip` of `button.strip-step`; `p.status-line`. A stand-in is the same element with `data-placeholder="<what is missing>"`. Examples: `fixtures/good-embed-project.html`, `fixtures/good-widget-project.html`.
 
 Resume: `header.resume-head` with `h1`, `p.contact`, `a.button`; then `section.resume-section` with `h2`; then `div.job` rows holding `div.job-gutter` (`span.job-role`, `span.job-org`, `span.job-dates`) and `div.job-body`. Projects are `ul.proj-list > li` with `span.proj-name` and `p.proj-meta` (`span.meta-label` for "Tools:"/"Method:"). Education reuses `div.job`.
 
