@@ -215,3 +215,22 @@ section.row { grid-template-columns: 150px 1fr; }  /* Workflow row only: label g
 /* page: resume */
 
 /* page: project */
+
+/* page: embed */
+.visual { margin: 0; }
+.visual-bar { display: flex; gap: 12px; align-items: center; margin-bottom: 12px; }
+.visual-reload {
+  font: inherit;
+  color: var(--ink);
+  background: transparent;
+  border: 1px solid var(--line);
+  border-radius: 4px;
+  padding: 12px 20px;
+  cursor: pointer;
+}
+.visual-reload:hover { border-color: var(--accent2); }
+.visual-reload:focus-visible { outline: 2px solid var(--ink); outline-offset: 3px; }
+.visual-frame iframe { display: block; min-height: 240px; height: 240px; }  /* min-height keeps JS-off usable */
+.visual-fallback { color: var(--muted); margin: 0; }
+.visual-fallback a { color: var(--accent); }
+.visual-frame[hidden], .visual-fallback[hidden] { display: none; }
