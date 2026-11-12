@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>skills</title>
+<meta name="description" content="Claude Code skills for productivity and data engineering development.">
+<link rel="icon" href="../images/favicon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600&amp;family=IBM+Plex+Serif:ital,wght@0,600;0,700;1,400&amp;display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../style.css">
+</head>
+<body>
+<header class="topbar">
+  <a class="topbar-name" href="../index.html">Austin Breunig</a>
+  <nav class="topbar-links" aria-label="Main">
+    <a href="#todo" data-placeholder="email">Email</a>
+    <a href="#todo" data-placeholder="LinkedIn URL">LinkedIn</a>
+    <a href="#todo" data-placeholder="GitHub URL">GitHub</a>
+    <a href="../resume.html">Resume</a>
+  </nav>
+</header>
+<main class="wrap">
+  <div class="row">
+    <div class="row-body">
+      <h1 class="project-title">skills</h1>
+      <p class="project-summary">Claude Code skills for productivity and data engineering development.</p>
+      <a class="repo-link" href="https://github.com/austinbreunig/skills">github.com/austinbreunig/skills</a>
+    </div>
+  </div>
+  <div class="row">
+    <div class="row-body free-block">
+      <p>Skills for productivity and data engineering development. Lifecycle makes development a whole lot easier. Instead of relying on a heavy multi agent workflow, lifecycle provides a guided workflow where a user and agents interact in a collaborative way.</p>
+      <p data-placeholder="one or two sentences on how lifecycle extends and wires together Matt Pocock's skills">Two sentences go here. Not written yet.</p>
+    </div>
+  </div>
+  <section class="row">
+    <h2 class="row-label">The cycle</h2>
+    <div class="row-body">
+      <div class="widget">
+        <div class="strip" id="cycle-strip"></div>
+        <p class="widget-out" id="cycle-out"></p>
+        <ul class="widget-fallback" id="cycle-list">
+          <li>Start (human step)</li>
+          <li>Route (human step)</li>
+          <li>Spec chain</li>
+          <li>Build chain</li>
+          <li>Ramp tail</li>
+          <li>Verdict (human step)</li>
+          <li>Retro</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+  <section class="row">
+    <h2 class="row-label">Human step vs agent step</h2>
+    <div class="row-body">
+      <p>A human step is a decision only you can make. <code>/lifecycle</code> runs every other step on its own, and stops at the next human step with the exact next command.</p>
+    </div>
+  </section>
+  <section class="row">
+    <h2 class="row-label">How it wires Matt Pocock's skills</h2>
+    <div class="row-body">
+      <p>Matt Pocock's skills do the work. Lifecycle navigates between them and adds <code>mindful</code>, <code>seam-lock</code>, <code>ramp</code> and <code>cycle-retro</code>.</p>
+    </div>
+  </section>
+  <section class="row">
+    <h2 class="row-label">Lifecycle</h2>
+    <div class="row-body">
+      <p><code>/lifecycle</code>: the navigator. Run it at the start of every fresh session.</p>
+      <p><code>mindful</code>: cuts forced or unneeded complexity from the shape of the work.</p>
+      <p><code>seam-lock</code>: commits contracts, stubs and fixtures, then attacks the split.</p>
+      <p><code>ramp</code>: plans how to pressure-test a built pipeline.</p>
+      <p><code>cycle-retro</code>: measures the cycle and proposes workflow edits.</p>
+      <div class="pair">
+        <div class="pair-item media" data-placeholder="screenshot: a /lifecycle run stopping at a human step, showing the next-command line"></div>
+        <div class="pair-item media" data-placeholder="screenshot: a /brief output, private repo names blurred"></div>
+      </div>
+    </div>
+  </section>
+  <section class="row">
+    <h2 class="row-label">Productivity</h2>
+    <div class="row-body">
+      <p><code>/hq</code>: the home screen for a private HQ repo. Sets it up and connects repos.</p>
+      <p><code>/brief</code>: shows where every connected repo stands.</p>
+      <p><code>/eod</code>: wraps up the day and writes a summary to the HQ repo.</p>
+      <p><code>/jot</code>: saves a quick note about the session.</p>
+    </div>
+  </section>
+  <section class="row">
+    <h2 class="row-label">Human</h2>
+    <div class="row-body">
+      <p><code>/human</code>: explains anything in plain words and pictures. Shared by both plugins.</p>
+    </div>
+  </section>
+  <section class="row">
+    <h2 class="row-label">What it built</h2>
+    <div class="row-body">
+      <!-- links:built -->
+      <p>plumber: Coming soon</p>
+      <p>maply: Coming soon</p>
+      <p><a href="../projects/bap.html">bap</a></p>
+      <!-- /links:built -->
+    </div>
+  </section>
+  <section class="row">
+    <h2 class="row-label">Status</h2>
+    <div class="row-body">
+      <p class="status-line">Every merge to <code>main</code> is a release. There are no version numbers. Tested with mattpocock-skills 1.3.1.</p>
+      <p>Built on <a href="https://github.com/mattpocock/skills">Matt Pocock's skills</a>. Install steps are in the <a href="https://github.com/austinbreunig/skills#readme">README</a>.</p>
+    </div>
+  </section>
+  <div class="row">
+    <div class="row-body">
+      <a class="button" href="https://github.com/austinbreunig/skills">View on GitHub</a>
+    </div>
+  </div>
+</main>
+<script>
+var CYCLE_STEPS = [{name: "Start", human: true}, {name: "Route", human: true}, {name: "Spec chain", human: false}, {name: "Build chain", human: false}, {name: "Ramp tail", human: false}, {name: "Verdict", human: true}, {name: "Retro", human: false}];
+
+function stepLabel(step) {
+  return step.human ? step.name + " (human step)" : step.name;
+}
+
+function stepNote(step) {
+  if (step.human) return step.name + ": a human step. Only you can decide this.";
+  return step.name + ": an agent step. /lifecycle runs it on its own.";
+}
+
+function showStrip() {
+  var strip = document.getElementById("cycle-strip");
+  var out = document.getElementById("cycle-out");
+  var buttons = [];
+  CYCLE_STEPS.forEach(function (step) {
+    var b = document.createElement("button");
+    b.type = "button";
+    b.className = "strip-step";
+    b.textContent = stepLabel(step);
+    b.setAttribute("aria-pressed", "false");
+    b.addEventListener("click", function () {
+      buttons.forEach(function (x) { x.setAttribute("aria-pressed", "false"); });
+      b.setAttribute("aria-pressed", "true");
+      out.textContent = stepNote(step);
+    });
+    buttons.push(b);
+    strip.appendChild(b);
+  });
+  document.getElementById("cycle-list").hidden = true;
+}
+
+if (typeof document !== "undefined") showStrip();
+</script>
+</body>
+</html>
