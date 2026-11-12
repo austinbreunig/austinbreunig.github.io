@@ -1,5 +1,5 @@
 // Stub for the plumber widget functions. Returns the golden answers for known inputs only.
-// Page tickets (#33 #34 #35) replace this with real functions inline in projects/plumber.html.
+// Page ticket #33 replaces this with real functions inline in projects/plumber.html.
 var PHASES = { load: { signature: "run(gdf, **params) -> gdf", config: "- name: load" } };
 
 function phaseInfo(name) {

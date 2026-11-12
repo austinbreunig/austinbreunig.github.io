@@ -1,6 +1,6 @@
 # Cycle 2 seams (spec #26)
 
-Pointers for every ticket. State each rule once here. The checker is `check.py`; the contract is `site-contract.md`.
+Pointers for every ticket (cycle 2 tickets: #28 to #36, #38, #39; #34, #35, #37 are closed as not planned, #34 and #35 merged into #33). State each rule once here. The checker is `check.py`; the contract is `site-contract.md`.
 
 ## S1. Labeled row without steps (page body shape)
 
@@ -19,9 +19,11 @@ Used by all five project pages. `ol.steps` is not used.
 - Stand-in (any kind): the element carries `data-placeholder="<what is missing>"`. Image stand-in = `div.media[data-placeholder]` with no `img`. Text stand-in = `p[data-placeholder]`.
 - Unbuilt cross-link = plain text, no `<a>`. Built = relative `<a>`.
 
-## S2. Guided-visual embed (owner: #29; consumers: #30 #31 #32 #37)
+## S2. Guided-visual embed (owner: #29; later consumers: the author, for the slots in #30 #31 #32)
 
-Markup, identical for all seven. `NAME` is the visual name. Page in `projects/`, visual in `visuals/`.
+Agents build no visual content. #29 builds the embed and demos it on `visuals/_demo.html` (ships live). #30, #31, #32 leave a stand-in slot `div.media[data-placeholder="visual: NAME"]` (names: `how-bap-works`, `layers-to-scores`, `monthly-refresh`, `python-to-map`, `how-its-built`). The author builds each visual later with a live server and swaps the slot for this markup. Skills has no guided visuals.
+
+Markup, identical for every visual. `NAME` is the visual name. Page in `projects/`, visual in `visuals/`.
 
 ```html
 <figure class="visual" data-visual="NAME">
@@ -77,7 +79,7 @@ Fixtures (each has `<!-- check-as: ... -->` and `<!-- expect: pass|fail -->`; th
 | `bad-script-page.html` (script on `maply`) | `projects/maply.html` | fail |
 | `bad-iframe-page.html` (iframe outside `.visual-frame`, no sandbox) | `projects/bap.html` | fail |
 
-## S4. Widget logic (owners: #33 #34 #35 #36)
+## S4. Widget logic (owners: #33 #36)
 
 All widget logic is plain functions in the page's one inline script. Names and results are fixed here. The golden file is `fixtures/widgets.golden.json`; the harness is `widget-harness.js`:
 
@@ -85,15 +87,15 @@ All widget logic is plain functions in the page's one inline script. Names and r
 node docs/contracts/widget-harness.js <file.js | page.html>
 ```
 
-It pulls the inline script from an `.html` (or reads a `.js`), runs it in a VM with no DOM and no network, and compares. The stub is `stubs/plumber-widgets.stub.js` (returns the golden answers for the listed inputs only; replace it in place, page tickets inline the real functions in the page).
+It pulls the inline script from an `.html` (or reads a `.js`), runs it in a VM with no DOM and no network, and compares. The stub is `stubs/plumber-widgets.stub.js` (returns the golden answers for the listed inputs only; replace it in place, #33 inlines the real functions in the page).
 
 Functions (pure, no DOM access inside them):
 
-- The harness must be run with `--require checkResult` or `--require strategyRows` (comma list) so a renamed or wrapped function fails instead of skipping. Page tickets keep these functions at the top level of the inline script (no IIFE) so the harness can see them. #34 runs with `--require strategyRows`, #35 with `--require checkResult`.
-- `checkResult(choice)` where `choice` is `"good"`, `"wrong-signature"` or `"bad-crs"`. Returns `{status: "PASS"|"WARN"|"FAIL", message: string}`. Unknown choice throws `Error`.
+- The harness must be run with `--require checkResult` or `--require strategyRows` (comma list) so a renamed or wrapped function fails instead of skipping. Page tickets keep these functions at the top level of the inline script (no IIFE) so the harness can see them. #33 runs with `--require strategyRows,checkResult`.
+- `checkResult(choice)` (good = PASS, wrong-signature = FAIL, bad-crs = WARN) where `choice` is `"good"`, `"wrong-signature"` or `"bad-crs"`. Returns `{status: "PASS"|"WARN"|"FAIL", message: string}`. Unknown choice throws `Error`.
 - `strategyRows(strategy, rows, partitions)` where `strategy` is `"local"` or `"localmp"`, `rows` is an array of ids, `partitions` an integer >= 1 (non-integers throw). Returns `{yamlLine, partitions: [[id...]...], returned: [id...]}`. `local`: one partition holding all rows. `localmp`: rows dealt round-robin into `partitions` lists (empty lists allowed). `returned` is always the original `rows` order. Unknown strategy or `partitions < 1` throws `Error`.
 - `phaseInfo(name)` for the clickable pipeline: returns `{signature, config}` for each phase in `PHASES`; unknown name throws.
-- Strip (skills): data array `CYCLE_STEPS = [{name, human: boolean}]`; the no-JS list is the same array written as HTML. #36 and #37 must agree with the cycle doc's step names; names come from the skills repo's lifecycle doc, not from memory.
+- Strip (skills): data array `CYCLE_STEPS = [{name, human: boolean}]`; the no-JS list is the same array written as HTML. #36 checks the step names by hand against the cycle doc; names; come from the skills repo's lifecycle doc, not from memory.
 
 `PHASES` for plumber (the 12-line YAML in the README is the source; #33 copies it, the check is that every phase in the YAML has a `phaseInfo` entry).
 
@@ -103,19 +105,14 @@ Functions (pure, no DOM access inside them):
 |---|---|
 | `docs/project-notes/*`, repo cleanliness | #27 |
 | `docs/contracts/check.py`, `site-contract.md` edits, `style.css` rules for S1 to S3 classes, `docs/spec.md` section 6 | #28 |
-| `embed.js`, `style.css` section `/* page: embed */`, `visuals/_demo.html` | #29 |
-| `projects/bap.html`, `images/bap/*`, `visuals/how-bap-works.*` | #30 |
-| `projects/conservation-dashboard.html`, `images/conservation-dashboard/*`, `visuals/layers-to-scores.*`, `visuals/monthly-refresh.*` | #31 |
-| `projects/maply.html`, `images/maply/*`, `visuals/python-to-map.*`, `visuals/how-its-built.*` | #32 |
-| `projects/plumber.html`: frame, pipeline, script skeleton | #33 |
-| plumber row "Same code new strategy" (its own marked block and its own functions) | #34 |
-| plumber row "Check before you run" (its own marked block and its own function) | #35 |
+| `embed.js`, `style.css` section `/* page: embed */`, `visuals/_demo.html` (ships live, never deleted) | #29 |
+| `projects/bap.html`, `images/bap/*` (visual slot is a stand-in) | #30 |
+| `projects/conservation-dashboard.html`, `images/conservation-dashboard/*` (visual slots are stand-ins) | #31 |
+| `projects/maply.html`, `images/maply/*` (visual slots are stand-ins) | #32 |
+| `projects/plumber.html` (whole file: pipeline, strategy switch, check playground, script), `images/plumber/*`, `style.css` section `/* page: plumber */` | #33 |
 | `projects/skills.html`, `images/skills/*` | #36 |
-| `visuals/<cycle>.*`, `visuals/<wires>.*` (skills visuals) | #37 |
 | `index.html` cards, cross-link edits | #38 |
 | any launch file, to fix failures only | #39 |
 
-#33, #34, #35 share `plumber.html`. #33 creates it with two empty marked blocks: `<!-- widget:strategy -->...<!-- /widget:strategy -->` and `<!-- widget:check -->...<!-- /widget:check -->`, and in the script `// widget:strategy` / `// widget:check` regions. #34 and #35 edit only inside their own markers. They are blocked by #33 (and so run one after another or merge cleanly).
-`skills.html` has three writers. #36 creates it with markers: `<!-- slot:the-cycle -->`, `<!-- slot:how-it-wires -->` (#37 edits only inside these) and `<!-- links:built -->` around the What-it-built row (#38 edits only inside this and nothing else). #37 checks its step names against `CYCLE_STEPS` by hand and says so in its PR.
-Widget animation classes `widget-partition` and `widget-row` are already in `classes.txt`; #28 writes their CSS. #34 and #35 may append a class line to `classes.txt` and CSS inside `/* page: plumber */` (created by #33, one subsection each, `/* widget:strategy */`, `/* widget:check */`); they touch no other part of `style.css`.
-Skills visuals names: `the-cycle` and `how-it-wires`.
+#33 is the only owner of `plumber.html` (no marker split). It may append class lines to `classes.txt`; widget animation classes `widget-partition` and `widget-row` are already there (#28 writes their CSS).
+`skills.html` has two writers. #36 creates it with one marker, `<!-- links:built -->`, around the What-it-built row (#38 edits only inside it). The page's only visual is the clickable strip (inline JS, from `CYCLE_STEPS`); it has no guided visuals and no `slot:` markers. #36 checks step names against the cycle doc by hand.
