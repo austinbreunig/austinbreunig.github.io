@@ -216,6 +216,10 @@ section.row { grid-template-columns: 150px 1fr; }  /* Workflow row only: label g
 
 /* page: project */
 
+/* page: plumber */
+#pipeline .code-block, #strategy .code-block { margin-top: 12px; white-space: pre-wrap; }
+#strategy .widget-partition { margin-bottom: 8px; }
+
 /* ---------- cycle 2: rows, code, pairs, status, widgets, visuals (spec #26) ---------- */
 .code-block {
   margin: 0 0 1em;
@@ -311,3 +315,6 @@ section.row { grid-template-columns: 150px 1fr; }  /* Workflow row only: label g
 @media (prefers-reduced-motion: reduce) {
   .widget-row { transition: none; }
 }
+
+/* page: embed */
+.visual-frame[hidden], .visual-fallback[hidden] { display: none; }
