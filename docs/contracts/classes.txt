@@ -46,3 +46,19 @@ proj-list
 proj-name
 proj-meta
 meta-label
+# cycle 2 (spec #26), added by seam lock. #28 writes the CSS for these.
+code-block
+pair
+pair-item
+status-line
+widget
+widget-controls
+widget-out
+widget-fallback
+strip
+strip-step
+visual
+visual-bar
+visual-frame
+visual-reload
+visual-fallback
