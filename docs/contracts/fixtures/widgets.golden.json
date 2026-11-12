@@ -1,0 +1,195 @@
+{
+  "note": "checkResult WARN/FAIL meanings: wrong signature cannot run = FAIL; CRS mismatch can run but gives wrong geometry = WARN. Confirm against plumber check output (open question on spec #26).",
+  "checkResult": [
+    {
+      "in": "good",
+      "out": {
+        "status": "PASS"
+      }
+    },
+    {
+      "in": "wrong-signature",
+      "out": {
+        "status": "FAIL"
+      }
+    },
+    {
+      "in": "bad-crs",
+      "out": {
+        "status": "WARN"
+      }
+    },
+    {
+      "in": "nope",
+      "throws": true
+    }
+  ],
+  "strategyRows": [
+    {
+      "in": [
+        "local",
+        [
+          1,
+          2,
+          3,
+          4,
+          5
+        ],
+        3
+      ],
+      "out": {
+        "yamlLine": "strategy: local",
+        "partitions": [
+          [
+            1,
+            2,
+            3,
+            4,
+            5
+          ]
+        ],
+        "returned": [
+          1,
+          2,
+          3,
+          4,
+          5
+        ]
+      }
+    },
+    {
+      "in": [
+        "localmp",
+        [
+          1,
+          2,
+          3,
+          4,
+          5
+        ],
+        3
+      ],
+      "out": {
+        "yamlLine": "strategy: localmp",
+        "partitions": [
+          [
+            1,
+            4
+          ],
+          [
+            2,
+            5
+          ],
+          [
+            3
+          ]
+        ],
+        "returned": [
+          1,
+          2,
+          3,
+          4,
+          5
+        ]
+      }
+    },
+    {
+      "in": [
+        "localmp",
+        [
+          1,
+          2
+        ],
+        4
+      ],
+      "out": {
+        "yamlLine": "strategy: localmp",
+        "partitions": [
+          [
+            1
+          ],
+          [
+            2
+          ],
+          [],
+          []
+        ],
+        "returned": [
+          1,
+          2
+        ]
+      }
+    },
+    {
+      "in": [
+        "localmp",
+        [],
+        2
+      ],
+      "out": {
+        "yamlLine": "strategy: localmp",
+        "partitions": [
+          [],
+          []
+        ],
+        "returned": []
+      }
+    },
+    {
+      "in": [
+        "localmp",
+        [
+          7,
+          3,
+          9
+        ],
+        1
+      ],
+      "out": {
+        "yamlLine": "strategy: localmp",
+        "partitions": [
+          [
+            7,
+            3,
+            9
+          ]
+        ],
+        "returned": [
+          7,
+          3,
+          9
+        ]
+      }
+    },
+    {
+      "in": [
+        "localmp",
+        [
+          1
+        ],
+        0
+      ],
+      "throws": true
+    },
+    {
+      "in": [
+        "spark",
+        [
+          1
+        ],
+        2
+      ],
+      "throws": true
+    },
+    {
+      "in": [
+        "localmp",
+        [
+          1
+        ],
+        1.5
+      ],
+      "throws": true
+    }
+  ]
+}

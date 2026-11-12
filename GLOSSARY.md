@@ -5,11 +5,11 @@ The personal portfolio site for Austin Breunig: a landing page, one page per pub
 ## Language
 
 **Project page**:
-The page for one public repo. It follows a fixed list: title and summary, one free block of the author's words, workflow, repo link.
+The page for one public repo. Its title and summary come first and its repo link last; the sections between them are decided per project in its grilling session.
 _Avoid_: Case study, project writeup
 
 **Guided visual**:
-An interactive explainer made by an agent with the `human` skill and embedded in the Workflow section by `<iframe>`.
+An interactive explainer made by an agent with the `human` skill and embedded in a project page by `<iframe>`.
 _Avoid_: Diagram, infographic, embed
 
 **Screenshot**:

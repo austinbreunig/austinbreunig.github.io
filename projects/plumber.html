@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>plumber</title>
+<meta name="description" content="plumber: a pipeline framework making it easy to wire together a complete and scalable workflow.">
+<link rel="icon" href="../images/favicon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600&amp;family=IBM+Plex+Serif:ital,wght@0,600;0,700;1,400&amp;display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../style.css">
+</head>
+<body>
+<header class="topbar">
+  <a class="topbar-name" href="../index.html">Austin Breunig</a>
+  <nav class="topbar-links" aria-label="Main">
+    <a href="#todo" data-placeholder="email">Email</a>
+    <a href="#todo" data-placeholder="LinkedIn URL">LinkedIn</a>
+    <a href="#todo" data-placeholder="GitHub URL">GitHub</a>
+    <a href="../resume.html">Resume</a>
+  </nav>
+</header>
+<main class="wrap">
+  <div class="row">
+    <div class="row-body">
+      <h1 class="project-title">plumber</h1>
+      <p class="project-summary">A pipeline framework making it easy to wire together a complete and scalable workflow.</p>
+      <a class="repo-link" href="https://github.com/austinbreunig/plumber">github.com/austinbreunig/plumber</a>
+    </div>
+  </div>
+  <div class="row">
+    <div class="row-body free-block">
+      <p>One of the biggest challenges I've faced is scaling a small idea from proof of concept quickly to a reliable and performant pipeline. Many geospatial projects I worked on seem to invariably blend the geospatial processing and business logic with the pipeline machinery itself, creating hard to reverse coupling. The result of this is a pipeline tailored specific to the logic it runs, and if that logic changes the pipeline itself must be changed too. To have a simple to use, simple to understand, and reliable framework which sees the code without affecting it or being effected by it, is the main goal of plumber. Shims or adapters are used to take any codebase and make it compatible with plumber. The idea is that there is a common interface between the code plumber runs and plumber itself. plumber acts as a flexible delivery driver simply running it in the order you define. An easy to define configuration file is used by plumber to state each phase and the order of the workflow. An execution engine is defined here, where the current options are local (sequential running on local machine) and localmp (utilizing local multiprocessing partitioned on a user defined argument). Added execution engines for pyspark and beam will later be added.</p>
+      <p>The input and output functions are your own. plumber writes GeoParquet only for checkpoints and the optional check sample.</p>
+    </div>
+  </div>
+
+  <section class="row">
+    <h2 class="row-label">The idea</h2>
+    <div class="row-body">
+      <p>Shims or adapters are used to take any codebase and make it compatible with plumber.</p>
+      <p data-placeholder="The idea: the phase contract, in the author's words">The idea text goes here. Not written yet.</p>
+      <pre class="code-block"><code>run(gdf, **params) -&gt; gdf</code></pre>
+      <div class="widget" id="pipeline">
+        <ul class="widget-fallback">
+          <li><code>input</code>: your own function that loads a dataframe. Config: <code>input: {path: myio:load_roads}</code></li>
+          <li><code>buffer</code>: <code>run(gdf, **params) -&gt; gdf</code>. Config: <code>- path: phases.buffer:run</code></li>
+          <li><code>output</code>: your own function that writes the result. Config: <code>output: {path: myio:write_parquet}</code></li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <section class="row">
+    <h2 class="row-label">A pipeline in 12 lines</h2>
+    <div class="row-body">
+      <pre class="code-block"><code>input:
+  path: myio:load_roads
+  params: {path: data/roads.parquet}
+phases:
+  - path: phases.buffer:run
+    partitionable: true
+    params: {distance: 10}
+output:
+  path: myio:write_parquet
+  params: {path: out/roads.parquet}
+execution:
+  strategy: local</code></pre>
+    </div>
+  </section>
+
+  <section class="row">
+    <h2 class="row-label">Same code, new strategy</h2>
+    <div class="row-body">
+      <div class="widget" id="strategy">
+        <ul class="widget-fallback">
+          <li><code>strategy: local</code>: one partition holds rows 1 2 3 4 5 6; they come back as 1 2 3 4 5 6.</li>
+          <li><code>strategy: localmp</code>: three partitions get the rows; workers run them; the rows come back as 1 2 3 4 5 6.</li>
+        </ul>
+      </div>
+      <div class="media" data-placeholder="screenshot: plumber run --strategy localmp --worker-count 4 log with Phase headings"></div>
+    </div>
+  </section>
+
+  <section class="row">
+    <h2 class="row-label">Check before you run</h2>
+    <div class="row-body">
+      <div class="widget" id="check">
+        <ul class="widget-fallback">
+          <li>good phase: PASS</li>
+          <li>wrong signature: FAIL</li>
+          <li>bad CRS: WARN</li>
+        </ul>
+      </div>
+      <div class="media" data-placeholder="screenshot: plumber check run showing PASS, WARN and FAIL"></div>
+    </div>
+  </section>
+
+  <section class="row">
+    <h2 class="row-label">Built with plumber</h2>
+    <div class="row-body">
+      <p data-placeholder="one sentence on bap, in the author's words"><a href="../projects/bap.html">bap</a>. Text goes here. Not written yet.</p>
+    </div>
+  </section>
+
+  <section class="row">
+    <h2 class="row-label">Next</h2>
+    <div class="row-body">
+      <p>PySpark and Beam engines: next, not built.</p>
+    </div>
+  </section>
+
+  <div class="row">
+    <div class="row-body">
+      <p class="status-line">v0.1.3, one user (me), local and multiprocess only.</p>
+      <p><a href="https://pypi.org/project/ab-plumber/">ab-plumber on PyPI</a></p>
+    </div>
+  </div>
+  <div class="row">
+    <div class="row-body">
+      <a class="button" href="https://github.com/austinbreunig/plumber">View on GitHub</a>
+    </div>
+  </div>
+</main>
+<script>
+var PHASES = {
+  input: {
+    signature: "your own function: loads and returns a dataframe",
+    config: "input:\n  path: myio:load_roads\n  params: {path: data/roads.parquet}"
+  },
+  buffer: {
+    signature: "run(gdf, **params) -> gdf",
+    config: "phases:\n  - path: phases.buffer:run\n    partitionable: true\n    params: {distance: 10}"
+  },
+  output: {
+    signature: "your own function: writes the result dataframe",
+    config: "output:\n  path: myio:write_parquet\n  params: {path: out/roads.parquet}"
+  }
+};
+
+var CHECKS = {
+  "good": { status: "PASS", message: "buffer matches run(gdf, **params) -> gdf." },
+  "wrong-signature": { status: "FAIL", message: "buffer is run(gdf) and takes no **params, so plumber cannot call it." },
+  "bad-crs": { status: "WARN", message: "The data is in degrees (EPSG:4326) but distance is in metres. It runs, but the geometry is wrong." }
+};
+
+function lookup(table, key) {
+  if (!Object.prototype.hasOwnProperty.call(table, key)) throw new Error("unknown key: " + key);
+  return table[key];
+}
+
+function phaseInfo(name) {
+  return lookup(PHASES, name);
+}
+
+function checkResult(choice) {
+  return lookup(CHECKS, choice);
+}
+
+function strategyRows(strategy, rows, partitions) {
+  if (strategy !== "local" && strategy !== "localmp") throw new Error("unknown strategy: " + strategy);
+  if (!(partitions >= 1) || partitions % 1 !== 0) throw new Error("partitions must be a whole number >= 1");
+  var count = strategy === "local" ? 1 : partitions;
+  var parts = [];
+  for (var i = 0; i < count; i++) parts.push([]);
+  rows.forEach(function (id, n) { parts[n % count].push(id); });
+  return { yamlLine: "strategy: " + strategy, partitions: parts, returned: rows.slice() };
+}
+
+// ---- page wiring (DOM only below this line) ----
+
+function el(tag, text, className) {
+  var node = document.createElement(tag);
+  if (text !== undefined) node.textContent = text;
+  if (className) node.className = className;
+  return node;
+}
+
+function makeButtons(widget, labels, onPick) {
+  var bar = el("div", undefined, "widget-controls");
+  var buttons = labels.map(function (label) {
+    var b = el("button", label[1]);
+    b.type = "button";
+    b.setAttribute("aria-pressed", "false");
+    b.addEventListener("click", function () {
+      buttons.forEach(function (x) { x.setAttribute("aria-pressed", String(x === b)); });
+      onPick(label[0]);
+    });
+    bar.appendChild(b);
+    return b;
+  });
+  widget.querySelector(".widget-fallback").hidden = true;
+  widget.appendChild(bar);
+  return buttons;
+}
+
+function setupPipeline(widget) {
+  var out = el("div");
+  out.setAttribute("aria-live", "polite");
+  var sig = el("p");
+  var cfg = el("pre", undefined, "code-block");
+  out.appendChild(sig);
+  out.appendChild(cfg);
+  var names = Object.keys(PHASES);
+  var buttons = makeButtons(widget, names.map(function (n) { return [n, n]; }), function (name) {
+    var info = phaseInfo(name);
+    sig.textContent = "Signature: " + info.signature;
+    cfg.textContent = info.config;
+  });
+  widget.appendChild(out);
+  buttons[1].click();
+}
+
+function setupCheck(widget) {
+  var out = el("p", undefined, "widget-out");
+  out.setAttribute("aria-live", "polite");
+  makeButtons(widget, [["good", "good phase"], ["wrong-signature", "wrong signature"], ["bad-crs", "bad CRS"]], function (choice) {
+    var r = checkResult(choice);
+    out.textContent = r.status + ": " + r.message;
+  });
+  widget.appendChild(out);
+}
+
+function setupStrategy(widget) {
+  var rows = [1, 2, 3, 4, 5, 6];
+  var yaml = el("pre", undefined, "code-block");
+  var stage = el("div");
+  stage.setAttribute("aria-live", "polite");
+  var reduced = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  var timers = [];
+
+  function group(title, lists) {
+    var box = el("div");
+    box.appendChild(el("p", title));
+    lists.forEach(function (ids) {
+      var part = el("div", undefined, "widget-partition");
+      ids.forEach(function (id) { part.appendChild(el("span", String(id), "widget-row")); });
+      box.appendChild(part);
+    });
+    return box;
+  }
+
+  function show(strategy) {
+    timers.forEach(clearTimeout);
+    timers = [];
+    var r = strategyRows(strategy, rows, 3);
+    yaml.textContent = "execution:\n  " + r.yamlLine;
+    stage.textContent = "";
+    var steps = [
+      group("Rows in", [rows]),
+      group("Partitions, out to workers", r.partitions),
+      group("Back in original order", [r.returned])
+    ];
+    steps.forEach(function (box, i) {
+      stage.appendChild(box);
+      if (reduced) return;
+      box.hidden = i > 0;
+      if (i > 0) timers.push(setTimeout(function () { box.hidden = false; }, i * 900));
+    });
+  }
+
+  makeButtons(widget, [["local", "local"], ["localmp", "localmp"]], show)[0].click();
+  widget.appendChild(yaml);
+  widget.appendChild(stage);
+}
+
+if (typeof document !== "undefined") {
+  setupPipeline(document.getElementById("pipeline"));
+  setupStrategy(document.getElementById("strategy"));
+  setupCheck(document.getElementById("check"));
+}
+</script>
+</body>
+</html>

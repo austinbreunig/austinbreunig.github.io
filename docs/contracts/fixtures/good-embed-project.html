@@ -1,0 +1,54 @@
+<!-- check-as: projects/bap.html -->
+<!-- expect: pass -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>bap</title>
+<meta name="description" content="Fixture">
+<link rel="icon" href="../images/favicon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono&family=IBM+Plex+Serif:wght@600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../style.css">
+</head>
+<body>
+<header class="topbar">
+  <a class="topbar-name" href="../index.html">Austin Breunig</a>
+  <nav class="topbar-links" aria-label="Main">
+    <a href="#todo" data-placeholder="email">Email</a>
+    <a href="#todo" data-placeholder="LinkedIn URL">LinkedIn</a>
+    <a href="#todo" data-placeholder="GitHub URL">GitHub</a>
+    <a href="../resume.html">Resume</a>
+  </nav>
+</header>
+<main class="wrap">
+  <div class="row">
+    <div class="row-body">
+      <h1 class="project-title">bap</h1>
+      <p class="project-summary">Summary.</p>
+      <a class="repo-link" href="https://github.com/austinbreunig/bap">repo</a>
+    </div>
+  </div>
+  <div class="row"><div class="row-body free-block"><p>Free block.</p></div></div>
+  <section class="row">
+    <h2 class="row-label">How it works</h2>
+    <div class="row-body">
+      <figure class="visual" data-visual="demo">
+        <div class="visual-bar">
+          <a class="button" href="../visuals/demo.html" target="_blank" rel="noopener">Open full</a>
+          <button class="visual-reload" type="button">Reload</button>
+        </div>
+        <div class="visual-frame media">
+          <iframe src="../visuals/demo.html" title="Demo visual" sandbox="allow-scripts"></iframe>
+        </div>
+        <p class="visual-fallback" hidden>This visual did not load. <a href="../visuals/demo.html">Open it on its own page.</a></p>
+        <noscript><p class="visual-fallback"><a href="../visuals/demo.html">Open the visual on its own page.</a></p></noscript>
+      </figure>
+    </div>
+  </section>
+  <div class="row"><div class="row-body"><a class="button" href="https://github.com/austinbreunig/bap">View on GitHub</a></div></div>
+</main>
+<script src="../embed.js"></script>
+</body>
+</html>
