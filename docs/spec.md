@@ -95,29 +95,30 @@ Layout A (prototype: `prototype/landing-layout`).
 
 ## 6. Project page (`projects/<name>.html`)
 
-Each project page has its own layout. A Workflow section does not fit every project, so there is no fixed list of sections. The layout (headers, sections, functionality, visuals) is decided in that project's grilling session and built with the author in their own editor.
+Decisions of spec #26 (cycle 2). Pages: `bap`, `conservation-dashboard`, `maply`, `plumber`, `skills`. The author writes all words; a missing word, screenshot or visual is a stand-in marked `data-placeholder`.
 
-Fixed on every project page:
+Fixed frame on every page, in order:
 
-1. **Title and summary:** large serif project name (`clamp(2.2rem, 7vw, 4rem)`), one-line summary, and a small repo link.
-2. **Repo link:** an accent button to the public repo, at the end.
-3. The top bar and the shared look and feel (section 3). Pages reach `style.css` with `../`.
+1. Top bar (section 4), then `h1.project-title`, `p.project-summary` and a small `a.repo-link` in the first row.
+2. An unlabeled free block of the author's words.
+3. Labeled rows (150px gutter label, content right; the label stacks above the content under 700px). Body shape: contract, "Labeled rows without steps".
+4. An accent repo button, last.
 
-Everything between the summary and the repo button is decided per project. Available building blocks, not requirements: a free block of the author's words, editorial rows with a left gutter label (150px), numbered steps with a visual beside each (16:10), guided visuals, screenshots. Rows are separated by a 1px `--line` top border. On a phone (under 700px) the gutter label stacks above the content.
+Not on any page: Workflow, Install or Try-it rows, a hero visual, a gallery, Further reading, live demos, tabs.
 
-Not on a project page unless a grilling session chooses it: Further reading, a hero visual, a gallery.
+Scripts: only inline on `plumber.html` and `skills.html` (hand-written, no libraries, no network), plus the one shared `embed.js` on pages with guided visuals. Every widget shows its plain result with JavaScript off. Animations stop or show a static end state under reduced motion. Cross-links point only at pages that exist in the same release; otherwise plain text.
 
 ### Content per project
 
-Each project gets one grilling session that asks the key prompts, records the author's answers, and decides the page's own structure. The session ends with a visual list: for each visual, where it goes on the page, what it shows, and whether it is a guided visual or a screenshot. The author takes screenshots; an agent makes guided visuals.
-
-| Project | Notes | Status |
+| Project | Rows after the free block | Visuals and shots |
 |---|---|---|
-| `bap` | Summary, audience, and free block written (`docs/project-notes/bap.md`). | Page layout to be decided again (grilling reopened). `projects/bap.html` will be redone. |
-| `conservation-dashboard` | Grilling ticket open | **PLACEHOLDER** (card says "Coming soon") |
-| `maply` | Grilling ticket open | **PLACEHOLDER** (card says "Coming soon") |
-| `plumber` | Grilling ticket open | **PLACEHOLDER** (card says "Coming soon") |
-| `skills` | Grilling ticket open | **PLACEHOLDER** (card says "Coming soon") |
+| `bap` | Before and after, How it works, Scale, Built with plumber | 2 screenshots (input, then boundaries); visual slot `how-bap-works`. Scale: 1,000,000 polygons in 254 s, 1.5 GB peak. |
+| `conservation-dashboard` | The Dashboard, The Pipeline, Monthly Refresh, Architectural Decisions, Status | 2 screenshots; visual slots `layers-to-scores`, `monthly-refresh`. Live dashboard linked, never embedded; moose sightings are synthetic, the other six layers are real. |
+| `maply` | Two canvases, Draw then export, Python to map, How it's built, Status | 3 screenshots; visual slots `python-to-map`, `how-its-built`. Status says Alpha and `MaplyCanvas` has no CRS. |
+| `plumber` | The idea, A pipeline in 12 lines, Same code new strategy, Check before you run, Built with plumber, Next | Three inline widgets (clickable pipeline, `local`/`localmp` switch, check playground) and 2 screenshots. No guided visual. Plain status line and PyPI link. |
+| `skills` | The cycle, Human step vs agent step, How it wires Matt Pocock's skills, Lifecycle, Productivity, Human, What it built, Status | The clickable strip (inline JS) is its only visual; 2 screenshots. |
+
+Open words (stand-ins): conservation-dashboard free block and Status; maply free block; skills free block (two sentences); landing card thumbnails and summaries.
 
 ## 7. Guided visuals
 
