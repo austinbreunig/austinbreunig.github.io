@@ -62,3 +62,5 @@ visual-bar
 visual-frame
 visual-reload
 visual-fallback
+widget-partition
+widget-row

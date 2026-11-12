@@ -4,7 +4,10 @@ const fs = require("fs");
 const path = require("path");
 const vm = require("vm");
 
-const file = process.argv[2];
+const args = process.argv.slice(2);
+const ri = args.indexOf("--require");
+const required = ri >= 0 ? args.splice(ri, 2)[1].split(",") : [];
+const file = args[0];
 if (!file) { console.error("usage: node widget-harness.js <file.js|page.html>"); process.exit(2); }
 let code = fs.readFileSync(file, "utf8");
 if (file.endsWith(".html")) {
@@ -21,7 +24,11 @@ let bad = 0, run = 0;
 function same(want, got) { return JSON.stringify(JSON.parse(JSON.stringify(got))) === JSON.stringify(want); }
 
 for (const name of ["checkResult", "strategyRows"]) {
-  if (!fns[name]) { console.log(`skip ${name} (not defined in this file)`); continue; }
+  if (!fns[name]) {
+    if (required.includes(name)) { bad++; console.log(`FAIL ${name} is required but not defined at top level`); }
+    else console.log(`skip ${name} (not defined in this file)`);
+    continue;
+  }
   for (const c of golden[name]) {
     run++;
     const args = name === "checkResult" ? [c.in] : c.in;

@@ -19,7 +19,7 @@ function checkResult(choice) {
 
 function strategyRows(strategy, rows, partitions) {
   if (strategy !== "local" && strategy !== "localmp") throw new Error("unknown strategy");
-  if (!(partitions >= 1)) throw new Error("partitions must be >= 1");
+  if (!(partitions >= 1) || partitions % 1 !== 0) throw new Error("partitions must be >= 1");
   var parts = [];
   for (var i = 0; i < (strategy === "local" ? 1 : partitions); i++) parts.push([]);
   rows.forEach(function (r, i) { parts[i % parts.length].push(r); });

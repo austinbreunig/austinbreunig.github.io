@@ -30,7 +30,7 @@ Markup, identical for all seven. `NAME` is the visual name. Page in `projects/`,
     <button class="visual-reload" type="button">Reload</button>
   </div>
   <div class="visual-frame media">
-    <iframe src="../visuals/NAME.html" title="ALT TEXT" sandbox="allow-scripts" loading="lazy"></iframe>
+    <iframe src="../visuals/NAME.html" title="ALT TEXT" sandbox="allow-scripts"></iframe>
   </div>
   <p class="visual-fallback" hidden>This visual did not load. <a href="../visuals/NAME.html">Open it on its own page.</a></p>
   <noscript><p class="visual-fallback"><a href="../visuals/NAME.html">Open the visual on its own page.</a></p></noscript>
@@ -49,6 +49,9 @@ Rules:
 - No `visual-ready` within 4000 ms: hide the iframe, unhide `.visual-fallback`. Reload: restore the iframe, set `src` again, restart the timer.
 - One script, `<script src="../embed.js">`, at the end of body, only on pages with a `.visual`. No inline copy per page. Visual pages post with `parent.postMessage(msg, "*")`. They take no data from the parent.
 - `visuals/NAME.html` is a standalone page: its own inline `<style>` and `<script>` are allowed there (rule 1 exception). The checker skips `visuals/`.
+- No `loading="lazy"` (it would starve the 4 s timer for visuals below the fold).
+- Every visual page MUST post `visual-ready` and `visual-height` (copy the script in `fixtures/visual-stub.html`). The brief template (`visuals/<name>.brief.md`) gets a fifth line, `Protocol: copies visual-stub script`, and each visual ticket checks it: open the embed, the fallback must NOT show.
+- JS off: the iframe keeps a CSS `min-height` (#29) and the `noscript` link sits under it. A visual must keep working with reduced motion (no autoplay motion; a static end state) and carry the `title` text alternative.
 - Open questions are in the spec, not here.
 
 Stub for demo and fixtures: `fixtures/visual-stub.html`.
@@ -86,8 +89,9 @@ It pulls the inline script from an `.html` (or reads a `.js`), runs it in a VM w
 
 Functions (pure, no DOM access inside them):
 
+- The harness must be run with `--require checkResult` or `--require strategyRows` (comma list) so a renamed or wrapped function fails instead of skipping. Page tickets keep these functions at the top level of the inline script (no IIFE) so the harness can see them. #34 runs with `--require strategyRows`, #35 with `--require checkResult`.
 - `checkResult(choice)` where `choice` is `"good"`, `"wrong-signature"` or `"bad-crs"`. Returns `{status: "PASS"|"WARN"|"FAIL", message: string}`. Unknown choice throws `Error`.
-- `strategyRows(strategy, rows, partitions)` where `strategy` is `"local"` or `"localmp"`, `rows` is an array of ids, `partitions` an integer >= 1. Returns `{yamlLine, partitions: [[id...]...], returned: [id...]}`. `local`: one partition holding all rows. `localmp`: rows dealt round-robin into `partitions` lists (empty lists allowed). `returned` is always the original `rows` order. Unknown strategy or `partitions < 1` throws `Error`.
+- `strategyRows(strategy, rows, partitions)` where `strategy` is `"local"` or `"localmp"`, `rows` is an array of ids, `partitions` an integer >= 1 (non-integers throw). Returns `{yamlLine, partitions: [[id...]...], returned: [id...]}`. `local`: one partition holding all rows. `localmp`: rows dealt round-robin into `partitions` lists (empty lists allowed). `returned` is always the original `rows` order. Unknown strategy or `partitions < 1` throws `Error`.
 - `phaseInfo(name)` for the clickable pipeline: returns `{signature, config}` for each phase in `PHASES`; unknown name throws.
 - Strip (skills): data array `CYCLE_STEPS = [{name, human: boolean}]`; the no-JS list is the same array written as HTML. #36 and #37 must agree with the cycle doc's step names; names come from the skills repo's lifecycle doc, not from memory.
 
@@ -112,4 +116,6 @@ Functions (pure, no DOM access inside them):
 | any launch file, to fix failures only | #39 |
 
 #33, #34, #35 share `plumber.html`. #33 creates it with two empty marked blocks: `<!-- widget:strategy -->...<!-- /widget:strategy -->` and `<!-- widget:check -->...<!-- /widget:check -->`, and in the script `// widget:strategy` / `// widget:check` regions. #34 and #35 edit only inside their own markers. They are blocked by #33 (and so run one after another or merge cleanly).
+`skills.html` has three writers. #36 creates it with markers: `<!-- slot:the-cycle -->`, `<!-- slot:how-it-wires -->` (#37 edits only inside these) and `<!-- links:built -->` around the What-it-built row (#38 edits only inside this and nothing else). #37 checks its step names against `CYCLE_STEPS` by hand and says so in its PR.
+Widget animation classes `widget-partition` and `widget-row` are already in `classes.txt`; #28 writes their CSS. #34 and #35 may append a class line to `classes.txt` and CSS inside `/* page: plumber */` (created by #33, one subsection each, `/* widget:strategy */`, `/* widget:check */`); they touch no other part of `style.css`.
 Skills visuals names: `the-cycle` and `how-it-wires`.
