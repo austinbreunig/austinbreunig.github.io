@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>maply</title>
+<meta name="description" content="maply: draw shapes in a Jupyter notebook and get shapely, WKT, GeoJSON, or a GeoDataFrame back.">
+<link rel="icon" href="../images/favicon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600&amp;family=IBM+Plex+Serif:ital,wght@0,600;0,700;1,400&amp;display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../style.css">
+</head>
+<body>
+<header class="topbar">
+  <a class="topbar-name" href="../index.html">Austin Breunig</a>
+  <nav class="topbar-links" aria-label="Main">
+    <a href="#todo" data-placeholder="email">Email</a>
+    <a href="#todo" data-placeholder="LinkedIn URL">LinkedIn</a>
+    <a href="#todo" data-placeholder="GitHub URL">GitHub</a>
+    <a href="../resume.html">Resume</a>
+  </nav>
+</header>
+<main class="wrap">
+  <div class="row">
+    <div class="row-body">
+      <h1 class="project-title">maply</h1>
+      <p class="project-summary">Draw shapes in a Jupyter notebook and get shapely, WKT, GeoJSON, or a GeoDataFrame back. For geospatial engineers who need hand-made geometry for minimal reproducible examples and algorithm tests.</p>
+      <a class="repo-link" href="https://github.com/austinbreunig/maply">github.com/austinbreunig/maply</a>
+    </div>
+  </div>
+  <div class="row">
+    <div class="row-body free-block">
+      <p data-placeholder="free block: 2 to 4 sentences in the author's words">Text goes here. Not written yet.</p>
+    </div>
+  </div>
+
+  <section class="row">
+    <h2 class="row-label">Two canvases</h2>
+    <div class="row-body">
+      <div class="pair">
+        <div class="pair-item media" data-placeholder="screenshot: MaplyCanvas with a polygon with a hole"></div>
+        <div class="pair-item media" data-placeholder="screenshot: GeoCanvas on a real map with a drawn shape"></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="row">
+    <h2 class="row-label">Draw, then export</h2>
+    <div class="row-body">
+      <div class="media" data-placeholder="screenshot: cell output showing .wkt and .geojson for the drawn shape"></div>
+      <pre class="code-block"><code>canvas.wkt
+canvas.geojson
+canvas.geometries
+canvas.to_geodataframe()</code></pre>
+    </div>
+  </section>
+
+  <section class="row">
+    <h2 class="row-label">Python to map</h2>
+    <div class="row-body">
+      <div class="media" data-placeholder="visual: python-to-map"></div>
+    </div>
+  </section>
+
+  <section class="row">
+    <h2 class="row-label">How it's built</h2>
+    <div class="row-body">
+      <p>A pure-Python core (model, tools, transform, interaction, geometry) plus thin widget wrappers (render, widget, geocanvas). Tools: ipycanvas, ipyleaflet with Geoman, shapely.</p>
+      <p>The drawing logic has no widget imports, so it is unit-tested without a Jupyter kernel.</p>
+      <div class="media" data-placeholder="visual: how-its-built"></div>
+    </div>
+  </section>
+
+  <section class="row">
+    <h2 class="row-label">Status</h2>
+    <div class="row-body">
+      <p class="status-line">Alpha. <code>MaplyCanvas</code> has no CRS.</p>
+    </div>
+  </section>
+
+  <div class="row">
+    <div class="row-body">
+      <a class="button" href="https://github.com/austinbreunig/maply">View on GitHub</a>
+    </div>
+  </div>
+</main>
+</body>
+</html>
