@@ -1,0 +1,147 @@
+<!-- Guided visual: python-to-map. Standalone page; inline style and script are allowed here. -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Python to map</title>
+<style>
+:root { --bg:#344033; --ink:#ece4d2; --muted:#a9b39c; --accent:#d9a441; --accent2:#9fb88a; --line:#4a5946; --map:#2a3328; }
+* { box-sizing: border-box; }
+body { margin:0; padding:16px; background:var(--bg); color:var(--ink); font-family:"IBM Plex Mono",monospace; font-size:14px; line-height:1.5; }
+.layout { display:grid; grid-template-columns:1fr 1fr; gap:16px; align-items:start; }
+@media (max-width:640px) { .layout { grid-template-columns:1fr; } }
+svg { width:100%; height:auto; display:block; border:1px solid var(--line); border-radius:4px; background:var(--map); }
+.grid { stroke:var(--line); stroke-width:1; }
+.shape { fill:var(--accent); fill-opacity:.25; stroke:var(--accent); stroke-width:2.5; stroke-linejoin:round; }
+.old { fill:none; stroke:var(--muted); stroke-width:1.5; stroke-dasharray:5 4; }
+.vertex { fill:var(--bg); stroke:var(--accent); stroke-width:2.5; }
+.hot { stroke:var(--accent2); }
+.arrow { stroke:var(--accent2); stroke-width:2; fill:none; }
+.steps { list-style:none; margin:0; padding:0; }
+.step { border-left:3px solid var(--line); padding:4px 0 4px 12px; margin:0 0 10px; }
+.step h2 { font-size:14px; margin:0 0 4px; }
+.step p { margin:0 0 6px; color:var(--muted); }
+.step.on { border-left-color:var(--accent); }
+.step.on h2 { color:var(--accent); }
+pre { margin:0; padding:8px 10px; background:var(--map); border:1px solid var(--line); border-radius:4px; overflow-x:auto; white-space:pre-wrap; word-break:break-word; font:inherit; font-size:12.5px; }
+.nav { display:flex; gap:8px; align-items:center; margin-top:12px; }
+button { font:inherit; color:var(--ink); background:transparent; border:1px solid var(--line); border-radius:4px; padding:6px 12px; cursor:pointer; }
+button:hover:not(:disabled) { border-color:var(--accent); }
+button:disabled { opacity:.4; cursor:default; }
+button:focus-visible { outline:2px solid var(--accent); outline-offset:2px; }
+.count { color:var(--muted); }
+.note { color:var(--muted); font-size:12px; margin:12px 0 0; }
+.js .step:not(.on) p, .js .step:not(.on) pre { display:none; }
+.nojs-hide { display:none; }
+.js .nojs-hide { display:flex; }
+</style>
+</head>
+<body>
+<div class="layout">
+  <svg viewBox="0 0 320 260" role="img" aria-label="A square polygon appears on a map, then one corner is dragged, then the new coordinates are read back into Python.">
+    <g id="grid">
+      <path class="grid" d="M0 65H320M0 130H320M0 195H320M80 0V260M160 0V260M240 0V260"/>
+    </g>
+    <!-- original square (step 2 and 3 show it, step 4 keeps it dashed) -->
+    <polygon id="old" class="old" points="70,200 190,200 190,70 70,70"/>
+    <!-- edited shape; its top-right corner moves in step 3 -->
+    <polygon id="shape" class="shape" points="70,200 190,200 190,70 70,70"/>
+    <g id="verts">
+      <circle class="vertex" cx="70" cy="200" r="6"/>
+      <circle class="vertex" cx="190" cy="200" r="6"/>
+      <circle id="moving" class="vertex" cx="190" cy="70" r="6"/>
+      <circle class="vertex" cx="70" cy="70" r="6"/>
+    </g>
+    <path id="drag" class="arrow" d="M196 66 L250 40" marker-end="url(#ah)"/>
+    <defs><marker id="ah" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L8 4L0 8z" fill="#9fb88a"/></marker></defs>
+    <text id="label" x="12" y="246" fill="#a9b39c" font-size="12" font-family="monospace"></text>
+  </svg>
+
+  <div>
+    <ol class="steps" id="steps">
+      <li class="step" data-step="1">
+        <h2>1. Make a shapely polygon</h2>
+        <p>Any shapely geometry works.</p>
+<pre>poly = Polygon([(-122.45, 37.75), (-122.40, 37.75),
+                (-122.40, 37.79), (-122.45, 37.79)])</pre>
+      </li>
+      <li class="step" data-step="2">
+        <h2>2. Push it onto the map</h2>
+        <p><code>add_geometry</code> draws it on the Geoman layer, so it is editable.</p>
+<pre>geo = GeoCanvas(center=(37.77, -122.42), zoom=12)
+geo.add_geometry(poly)
+geo</pre>
+      </li>
+      <li class="step" data-step="3">
+        <h2>3. Edit it by hand</h2>
+        <p>Drag a corner on the map. The dashed line is where it started.</p>
+<pre>(drag the top-right corner)</pre>
+      </li>
+      <li class="step" data-step="4">
+        <h2>4. Read it back</h2>
+        <p>The map is the source of truth, so you get the edited shape.</p>
+<pre>geo.wkt   # the edited polygon, as WKT
+geo.geometries   # or as shapely objects</pre>
+      </li>
+    </ol>
+    <div class="nav nojs-hide">
+      <button id="prev" type="button">Back</button>
+      <button id="next" type="button">Next</button>
+      <span class="count" id="count"></span>
+    </div>
+    <p class="note">Illustration with example coordinates. Source: maply README and geocanvas.py.</p>
+  </div>
+</div>
+
+<script>
+(function () {
+  document.documentElement.classList.add("js");
+  var steps = document.querySelectorAll(".step");
+  var shape = document.getElementById("shape");
+  var old = document.getElementById("old");
+  var verts = document.getElementById("verts");
+  var moving = document.getElementById("moving");
+  var drag = document.getElementById("drag");
+  var label = document.getElementById("label");
+  var prev = document.getElementById("prev");
+  var next = document.getElementById("next");
+  var count = document.getElementById("count");
+  var SQUARE = "70,200 190,200 190,70 70,70";
+  var EDITED = "70,200 190,200 250,40 70,70";
+  var n = 1;
+
+  function show(i) {
+    n = i;
+    steps.forEach(function (s) { s.classList.toggle("on", +s.dataset.step === n); });
+    // step 1: Python only, no map shape yet
+    shape.style.display = n === 1 ? "none" : "";
+    verts.style.display = n === 1 ? "none" : "";
+    old.style.display = n >= 3 ? "" : "none";
+    drag.style.display = n === 3 ? "" : "none";
+    var edited = n >= 3;
+    shape.setAttribute("points", edited ? EDITED : SQUARE);
+    moving.setAttribute("cx", edited ? 250 : 190);
+    moving.setAttribute("cy", edited ? 40 : 70);
+    moving.classList.toggle("hot", n === 3);
+    label.textContent = ["", "no map yet: just a shapely object in Python", "add_geometry: shape is on the map",
+      "dragging the top-right corner", "geo.wkt returns the edited shape"][n];
+    prev.disabled = n === 1;
+    next.disabled = n === 4;
+    count.textContent = n + " / 4";
+    send();
+  }
+
+  function send() {
+    parent.postMessage({type: "visual-height", px: Math.ceil(document.documentElement.scrollHeight)}, "*");
+  }
+
+  prev.addEventListener("click", function () { show(n - 1); });
+  next.addEventListener("click", function () { show(n + 1); });
+  addEventListener("load", function () { parent.postMessage({type: "visual-ready"}, "*"); send(); });
+  addEventListener("resize", send);
+  show(2);
+})();
+</script>
+</body>
+</html>

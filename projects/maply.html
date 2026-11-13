@@ -25,13 +25,15 @@
   <div class="row">
     <div class="row-body">
       <h1 class="project-title">maply</h1>
-      <p class="project-summary">Draw shapes in a Jupyter notebook and get shapely, WKT, GeoJSON, or a GeoDataFrame back. For geospatial engineers who need hand-made geometry for minimal reproducible examples and algorithm tests.</p>
+      <p class="project-summary">Draw shapes, have fun. For geospatial engineers who need shapes for minimal reproducible examples and algorithm tests. A Jupyter widget for drawing and exporting shapes as a shapely, WKT, GeoJSON, or GeoDataFrame. </p>
       <a class="repo-link" href="https://github.com/austinbreunig/maply">github.com/austinbreunig/maply</a>
     </div>
   </div>
   <div class="row">
     <div class="row-body free-block">
-      <p data-placeholder="free block: 2 to 4 sentences in the author's words">Text goes here. Not written yet.</p>
+      <p data-placeholder="free block: 2 to 4 sentences in the author's words">Geospatial data is inherently visual, yet our way of developing it, is not. Furthermore, geospatial data is complex, incredibly tedious, and unique. 
+        Too many times have I missed edge cases because I wasn't able to 'see' the data and conceptualize the problem or the applied solution. When building tests or minimal-reproducible-examples, it becomes frustratingly difficult to prepare
+      test data. maply aims to relieve some of that frustration and allow for quicker prototyping.  </p>
     </div>
   </div>
 
@@ -39,8 +41,8 @@
     <h2 class="row-label">Two canvases</h2>
     <div class="row-body">
       <div class="pair">
-        <div class="pair-item media" data-placeholder="screenshot: MaplyCanvas with a polygon with a hole"></div>
-        <div class="pair-item media" data-placeholder="screenshot: GeoCanvas on a real map with a drawn shape"></div>
+        <div class="pair-item media"><img src="../images/maply/ezgif.com-gif-maker-canvas.gif" alt="Canvas drawing a shape in a xy space"></div>
+        <div class="pair-item media"><img src="../images/maply/ezgif.com-gif-maker.gif" alt="GeoCanvas drawing a shape on a map"></div>
       </div>
     </div>
   </section>
@@ -59,7 +61,17 @@ canvas.to_geodataframe()</code></pre>
   <section class="row">
     <h2 class="row-label">Python to map</h2>
     <div class="row-body">
-      <div class="media" data-placeholder="visual: python-to-map"></div>
+      <figure class="visual" data-visual="python-to-map">
+        <div class="visual-bar">
+          <a class="button" href="../visuals/python-to-map.html" target="_blank" rel="noopener">Open full</a>
+          <button class="visual-reload" type="button">Reload</button>
+        </div>
+        <div class="visual-frame media">
+          <iframe src="../visuals/python-to-map.html" title="Guided visual: a shapely polygon is pushed onto the map with add_geometry, edited by hand, then read back with geo.wkt" sandbox="allow-scripts"></iframe>
+        </div>
+        <p class="visual-fallback" hidden>This visual did not load. <a href="../visuals/python-to-map.html">Open it on its own page.</a></p>
+        <noscript><p class="visual-fallback"><a href="../visuals/python-to-map.html">Open the visual on its own page.</a></p></noscript>
+      </figure>
     </div>
   </section>
 
@@ -85,5 +97,6 @@ canvas.to_geodataframe()</code></pre>
     </div>
   </div>
 </main>
+<script src="../embed.js"></script>
 </body>
 </html>
