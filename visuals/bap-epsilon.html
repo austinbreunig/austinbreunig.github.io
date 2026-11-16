@@ -1,0 +1,134 @@
+<!-- Guided visual: BAP epsilon. Standalone page; inline style and script are allowed here. -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BAP epsilon</title>
+<style>
+:root { --bg:#344033; --ink:#ece4d2; --muted:#a9b39c; --accent:#d9a441; --accent2:#9fb88a; --line:#4a5946; --map:#2a3328; }
+* { box-sizing: border-box; }
+body { margin:0; padding:16px; background:var(--bg); color:var(--ink); font-family:"IBM Plex Mono",monospace; font-size:14px; line-height:1.5; }
+.layout { display:grid; grid-template-columns:1fr 1fr; gap:16px; align-items:start; }
+@media (max-width:640px) { .layout { grid-template-columns:1fr; } }
+svg { width:100%; height:auto; display:block; border:1px solid var(--line); border-radius:4px; background:var(--map); }
+.grid { stroke:var(--line); stroke-width:1; }
+.steps { list-style:none; margin:0; padding:0; }
+.step { border-left:3px solid var(--line); padding:4px 0 4px 12px; margin:0 0 10px; }
+.step h2 { font-size:14px; margin:0 0 4px; }
+.step p { margin:0 0 6px; color:var(--muted); }
+.step.on { border-left-color:var(--accent); }
+.step.on h2 { color:var(--accent); }
+pre { margin:0; padding:8px 10px; background:var(--map); border:1px solid var(--line); border-radius:4px; overflow-x:auto; white-space:pre-wrap; word-break:break-word; font:inherit; font-size:12.5px; }
+.nav { display:flex; gap:8px; align-items:center; margin-top:12px; }
+button { font:inherit; color:var(--ink); background:transparent; border:1px solid var(--line); border-radius:4px; padding:6px 12px; cursor:pointer; }
+button:hover:not(:disabled) { border-color:var(--accent); }
+button:disabled { opacity:.4; cursor:default; }
+button:focus-visible { outline:2px solid var(--accent); outline-offset:2px; }
+.count { color:var(--muted); }
+.note { color:var(--muted); font-size:12px; margin:12px 0 0; }
+.js .step:not(.on) p, .js .step:not(.on) pre { display:none; }
+.nojs-hide { display:none; }
+.js .nojs-hide { display:flex; }
+.p { fill:var(--muted); fill-opacity:.35; stroke:var(--muted); stroke-width:1.5; }
+.halo { fill:var(--accent2); fill-opacity:.08; stroke:var(--accent2); stroke-width:2; stroke-dasharray:5 4; display:none; }
+.link, .gap { fill:none; stroke:var(--accent2); stroke-width:2.5; display:none; }
+.gaptxt { fill:var(--accent2); font:11px monospace; display:none; }
+.s1 .gap, .s1 .gaptxt { display:inline; }
+.s2 .h2, .s2 .l2 { display:inline; }
+.s3 .h3, .s3 .l3, .s4 .l3 { display:inline; }
+.s2 .a, .s2 .b, .s3 .a, .s3 .b, .s3 .d { fill:var(--accent); fill-opacity:.4; stroke:var(--accent); }
+.s4 .b { fill:var(--accent); fill-opacity:.55; stroke:var(--accent); stroke-width:3; }
+.s4 .a, .s4 .d { fill:var(--accent); fill-opacity:.25; stroke:var(--accent); }
+.s2 .c, .s3 .c, .s4 .c { fill-opacity:.15; stroke-dasharray:3 3; }
+</style>
+</head>
+<body>
+<div class="layout">
+  <svg id="map" class="s1" viewBox="0 0 320 260" role="img" aria-label="Four squares. Rings of radius epsilon show which squares are neighbors. Three become one cluster and one stays alone.">
+    <path class="grid" d="M0 40H320M0 80H320M0 120H320M0 160H320M0 200H320M0 240H320M40 0V260M80 0V260M120 0V260M160 0V260M200 0V260M240 0V260M280 0V260"/>
+    <rect class="p a" x="43" y="83" width="34" height="34"/>
+    <rect class="p b" x="123" y="83" width="34" height="34"/>
+    <rect class="p d" x="123" y="163" width="34" height="34"/>
+    <rect class="p c" x="243" y="163" width="34" height="34"/>
+    <rect class="halo h2" x="-7" y="33" width="134" height="134" rx="50"/>
+    <rect class="halo h2" x="193" y="113" width="134" height="134" rx="50"/>
+    <rect class="halo h3" x="73" y="33" width="134" height="134" rx="50"/>
+    <path class="gap" d="M77 100H123M77 94V106M123 94V106M157 180H243M157 174V186M243 174V186"/>
+    <text class="gaptxt" x="100" y="90" text-anchor="middle">gap</text>
+    <text class="gaptxt" x="200" y="170" text-anchor="middle">bigger gap</text>
+    <path class="link l2" d="M77 100H123"/>
+    <path class="link l3" d="M77 100H123M140 117V163"/>
+    <text id="label" x="12" y="254" fill="#a9b39c" font-size="12" font-family="monospace"></text>
+  </svg>
+
+  <div>
+    <ol class="steps" id="steps">
+      <li class="step" data-step="1">
+        <h2>1. Measure the gap</h2>
+        <p>The gap is the shortest distance from one polygon edge to another.</p>
+<pre>gap(A, B) &lt; gap(D, C)</pre>
+      </li>
+      <li class="step" data-step="2">
+        <h2>2. Compare it to epsilon</h2>
+        <p>Draw a ring of radius epsilon around a polygon. Anything the ring touches is a neighbor.</p>
+<pre>epsilon = 50</pre>
+      </li>
+      <li class="step" data-step="3">
+        <h2>3. Count neighbors</h2>
+        <p>A core polygon needs at least 3 neighbors, counting itself. B has A, D, and itself.</p>
+<pre>--min-samples 3</pre>
+      </li>
+      <li class="step" data-step="4">
+        <h2>4. Grow the cluster</h2>
+        <p>A and D are not core, but they touch core B, so they join its cluster. C touches nothing and is an outlier.</p>
+<pre>cluster_id: A, B, D = 0
+cluster_id: C = null</pre>
+      </li>
+    </ol>
+    <div class="nav nojs-hide">
+      <button id="prev" type="button">Back</button>
+      <button id="next" type="button">Next</button>
+      <span class="count" id="count"></span>
+    </div>
+    <p class="note">Illustration with example shapes. Epsilon is 50 here. Not real data.</p>
+  </div>
+</div>
+
+<script>
+(function () {
+  document.documentElement.classList.add("js");
+  var steps = document.querySelectorAll(".step");
+  var map = document.getElementById("map");
+  var label = document.getElementById("label");
+  var prev = document.getElementById("prev");
+  var next = document.getElementById("next");
+  var count = document.getElementById("count");
+  var LABELS = ["gap = edge to edge distance","ring of radius epsilon: A reaches B, C reaches nothing","B reaches A and D: 3 with itself, so it is core","core B pulls in A and D; C is an outlier"];
+  var N = LABELS.length;
+  var n = 1;
+
+  function show(i) {
+    n = i;
+    steps.forEach(function (s) { s.classList.toggle("on", +s.dataset.step === n); });
+    map.setAttribute("class", "s" + n);
+    label.textContent = LABELS[n - 1];
+    prev.disabled = n === 1;
+    next.disabled = n === N;
+    count.textContent = n + " / " + N;
+    send();
+  }
+
+  function send() {
+    parent.postMessage({type: "visual-height", px: Math.ceil(document.documentElement.scrollHeight)}, "*");
+  }
+
+  prev.addEventListener("click", function () { show(n - 1); });
+  next.addEventListener("click", function () { show(n + 1); });
+  addEventListener("load", function () { parent.postMessage({type: "visual-ready"}, "*"); send(); });
+  addEventListener("resize", send);
+  show(1);
+})();
+</script>
+</body>
+</html>

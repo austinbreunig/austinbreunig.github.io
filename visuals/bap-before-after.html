@@ -1,0 +1,131 @@
+<!-- Guided visual: bap before and after. Standalone page; inline style and script are allowed here. -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BAP before and after</title>
+<style>
+:root { --bg:#344033; --ink:#ece4d2; --muted:#a9b39c; --accent:#d9a441; --accent2:#9fb88a; --line:#4a5946; --map:#2a3328; }
+* { box-sizing: border-box; }
+body { margin:0; padding:16px; background:var(--bg); color:var(--ink); font-family:"IBM Plex Mono",monospace; font-size:14px; line-height:1.5; }
+.layout { display:grid; grid-template-columns:1fr 1fr; gap:16px; align-items:start; }
+@media (max-width:640px) { .layout { grid-template-columns:1fr; } }
+svg { width:100%; height:auto; display:block; border:1px solid var(--line); border-radius:4px; background:var(--map); }
+.grid { stroke:var(--line); stroke-width:1; }
+.p { fill:var(--muted); fill-opacity:.35; stroke:var(--muted); stroke-width:1; stroke-linejoin:round; }
+.link { fill:none; stroke:var(--accent2); stroke-width:2; stroke-dasharray:4 3; display:none; }
+.bound { fill:var(--accent); fill-opacity:.12; stroke:var(--accent); stroke-width:2.5; stroke-linejoin:miter; display:none; }
+.s2 .link, .s3 .link { display:inline; }
+.s3 .bound, .s4 .bound { display:inline; }
+.s2 .p:not(.out), .s3 .p:not(.out), .s4 .p:not(.out) { fill:var(--accent); fill-opacity:.4; stroke:var(--accent); }
+.s2 .out, .s3 .out, .s4 .out { fill-opacity:.15; stroke-dasharray:3 3; }
+.steps { list-style:none; margin:0; padding:0; }
+.step { border-left:3px solid var(--line); padding:4px 0 4px 12px; margin:0 0 10px; }
+.step h2 { font-size:14px; margin:0 0 4px; }
+.step p { margin:0 0 6px; color:var(--muted); }
+.step.on { border-left-color:var(--accent); }
+.step.on h2 { color:var(--accent); }
+pre { margin:0; padding:8px 10px; background:var(--map); border:1px solid var(--line); border-radius:4px; overflow-x:auto; white-space:pre-wrap; word-break:break-word; font:inherit; font-size:12.5px; }
+.nav { display:flex; gap:8px; align-items:center; margin-top:12px; }
+button { font:inherit; color:var(--ink); background:transparent; border:1px solid var(--line); border-radius:4px; padding:6px 12px; cursor:pointer; }
+button:hover:not(:disabled) { border-color:var(--accent); }
+button:disabled { opacity:.4; cursor:default; }
+button:focus-visible { outline:2px solid var(--accent); outline-offset:2px; }
+.count { color:var(--muted); }
+.note { color:var(--muted); font-size:12px; margin:12px 0 0; }
+.js .step:not(.on) p, .js .step:not(.on) pre { display:none; }
+.nojs-hide { display:none; }
+.js .nojs-hide { display:flex; }
+</style>
+</head>
+<body>
+<div class="layout">
+  <svg id="map" class="s1" viewBox="0 0 320 260" role="img" aria-label="Eight squares on a map. Four sit together and three sit together, each group is linked into a cluster and wrapped in a square-cornered boundary. One stray stays alone.">
+    <path class="grid" d="M0 40H320M0 80H320M0 120H320M0 160H320M0 200H320M0 240H320M40 0V260M80 0V260M120 0V260M160 0V260M200 0V260M240 0V260M280 0V260"/>
+    <!-- squares sit on the grid, nudged 3px: cluster of 4, cluster of 3, one stray -->
+    <polygon class="p" points="43,43 77,43 77,77 43,77"/>
+    <polygon class="p" points="83,43 117,43 117,77 83,77"/>
+    <polygon class="p" points="43,83 77,83 77,117 43,117"/>
+    <polygon class="p" points="83,83 117,83 117,117 83,117"/>
+    <polygon class="p" points="163,123 197,123 197,157 163,157"/>
+    <polygon class="p" points="203,123 237,123 237,157 203,157"/>
+    <polygon class="p" points="203,163 237,163 237,197 203,197"/>
+    <polygon class="p out" points="283,43 317,43 317,77 283,77"/>
+    <path class="link" d="M60,60 L100,60 M60,60 L60,100 M100,60 L100,100 M60,100 L100,100 M180,140 L220,140 M220,140 L220,180"/>
+    <polygon class="bound" points="37,37 123,37 123,123 37,123"/>
+    <polygon class="bound" points="157,117 243,117 243,203 197,203 197,163 157,163"/>
+    <text id="label" x="12" y="250" fill="#a9b39c" font-size="12" font-family="monospace"></text>
+  </svg>
+
+  <div>
+    <ol class="steps" id="steps">
+      <li class="step" data-step="1">
+        <h2>1. Start with the polygons</h2>
+        <p>Eight polygons. Two groups sit close together (4 and 3). One is off on its own.</p>
+<pre>bap sample.parquet out.parquet \
+  --key-field zone</pre>
+      </li>
+      <li class="step" data-step="2">
+        <h2>2. Cluster the neighbors</h2>
+        <p>Polygons within epsilon of each other are linked. Each linked group is a cluster. The stray joins nothing.</p>
+<pre>--epsilon 80 --epsilon 35</pre>
+      </li>
+      <li class="step" data-step="3">
+        <h2>3. Wrap each cluster</h2>
+        <p>Each cluster gets one square-cornered boundary. It must be at least 0.75 tight.</p>
+<pre>--min-tightness 0.75</pre>
+      </li>
+      <li class="step" data-step="4">
+        <h2>4. Read the result</h2>
+        <p>Seven polygons become two boundaries. The stray stays, with a null cluster ID.</p>
+<pre>clusters: 2
+outliers: 1
+output_rows: 3</pre>
+      </li>
+    </ol>
+    <div class="nav nojs-hide">
+      <button id="prev" type="button">Back</button>
+      <button id="next" type="button">Next</button>
+      <span class="count" id="count"></span>
+    </div>
+    <p class="note">Illustration with example shapes. Not real data.</p>
+  </div>
+</div>
+
+<script>
+(function () {
+  document.documentElement.classList.add("js");
+  var steps = document.querySelectorAll(".step");
+  var map = document.getElementById("map");
+  var label = document.getElementById("label");
+  var prev = document.getElementById("prev");
+  var next = document.getElementById("next");
+  var count = document.getElementById("count");
+  var n = 1;
+
+  function show(i) {
+    n = i;
+    steps.forEach(function (s) { s.classList.toggle("on", +s.dataset.step === n); });
+    map.setAttribute("class", "s" + n);
+    label.textContent = ["", "input: 8 polygons", "2 clusters (4 and 3), 1 stray",
+      "one boundary per cluster", "output: 2 boundaries + 1 stray"][n];
+    prev.disabled = n === 1;
+    next.disabled = n === 4;
+    count.textContent = n + " / 4";
+    send();
+  }
+
+  function send() {
+    parent.postMessage({type: "visual-height", px: Math.ceil(document.documentElement.scrollHeight)}, "*");
+  }
+
+  prev.addEventListener("click", function () { show(n - 1); });
+  next.addEventListener("click", function () { show(n + 1); });
+  addEventListener("load", function () { parent.postMessage({type: "visual-ready"}, "*"); send(); });
+  addEventListener("resize", send);
+  show(1);
+})();
+</script>
+</body>
+</html>

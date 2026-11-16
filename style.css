@@ -296,3 +296,7 @@ section.row { grid-template-columns: 150px 1fr; }  /* Workflow row only: label g
 
 /* page: embed */
 .visual-frame[hidden], .visual-fallback[hidden] { display: none; }
+
+/* Sub rows: a smaller gutter label under a parent row (bap "How it works") */
+.row.sub { border-top: 0; padding-top: 0; }
+.sub-label { font-size: 1rem; }

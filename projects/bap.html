@@ -31,25 +31,81 @@
   </div>
   <div class="row">
     <div class="row-body free-block">
-      <p>It's for GIS folk who may have too many polygons and instead want a few big ass ones.</p>
-      <p>Delineating new boundaries on aggregate fields is a common pattern in organizing and restructuring geospatial data. I wanted to work on building a clean interface between the core algorithm (DBSCAN-like clustering) and a CLI. The package is simple, but user-friendly. The simplicity of the package and workflow was intentional, as the core intention was to showcase (and test) the functionality of plumber (i.e. a pipeline framework, used to scale geospatial workflows).</p>
+      <p>Got too many polygons and instead want a few "big-ass" ones?</p>
+      <p>Delineating new boundaries on a field aggregate is a common pattern in organizing and restructuring geospatial data. 
+        I wanted to work on building a clean interface between the core algorithm (DBSCAN-like clustering) and a CLI. 
+      </p>
     </div>
   </div>
   <section class="row">
     <h2 class="row-label">Before and after</h2>
     <div class="row-body">
-      <div class="pair">
-        <div class="pair-item media" data-placeholder="screenshot: sample input, 4 blocks plus 10 strays (50 polygons)"></div>
-        <div class="pair-item media" data-placeholder="screenshot: same view with cluster boundaries over it"></div>
-      </div>
+      <figure class="visual" data-visual="bap-before-after">
+        <div class="visual-bar">
+          <a class="button" href="../visuals/bap-before-after.html" target="_blank" rel="noopener">Open full</a>
+          <button class="visual-reload" type="button">Reload</button>
+        </div>
+        <div class="visual-frame media">
+          <iframe src="../visuals/bap-before-after.html" title="Guided visual: eight squares form two clusters, each wrapped in a square-cornered boundary" sandbox="allow-scripts"></iframe>
+        </div>
+        <p class="visual-fallback" hidden>This visual did not load. <a href="../visuals/bap-before-after.html">Open it on its own page.</a></p>
+        <noscript><p class="visual-fallback"><a href="../visuals/bap-before-after.html">Open the visual on its own page.</a></p></noscript>
+      </figure>
     </div>
   </section>
 
   <section class="row">
     <h2 class="row-label">How it works</h2>
     <div class="row-body">
-      <p>Validate, project to UTM, cluster, boundary, tightness gate (&gt;= 0.75), IDs, project back.</p>
-      <div class="media" data-placeholder="visual: how-bap-works"></div>
+      <p>Density-based clustering is used here for its ability to grow
+        in any direction allowing for irregular shaped clusters to occur. This results in a more accurate representation of reality.
+      </p>
+    </div>
+  </section>
+
+  <section class="row sub">
+    <h3 class="row-label sub-label">Epsilon</h3>
+    <div class="row-body">
+      <p>Epsilon is the distance between objects that determines who is a neighbor. Nearest points are used instead of centroids. 
+        If a pair of points becomes neighbors, they become a neighborhood, and the search continues to extend outward
+        until there are no more points to add. Once a neighborhood is finalized, a cluster is formed. Not all clusters will form a bap-polygon:</p>
+      <figure class="visual" data-visual="bap-epsilon">
+        <div class="visual-bar">
+          <a class="button" href="../visuals/bap-epsilon.html" target="_blank" rel="noopener">Open full</a>
+          <button class="visual-reload" type="button">Reload</button>
+        </div>
+        <div class="visual-frame media">
+          <iframe src="../visuals/bap-epsilon.html" title="Guided visual: how epsilon decides which polygons are neighbors and which form a cluster" sandbox="allow-scripts"></iframe>
+        </div>
+        <p class="visual-fallback" hidden>This visual did not load. <a href="../visuals/bap-epsilon.html">Open it on its own page.</a></p>
+        <noscript><p class="visual-fallback"><a href="../visuals/bap-epsilon.html">Open the visual on its own page.</a></p></noscript>
+      </figure>
+    </div>
+  </section>
+
+  <section class="row sub">
+    <h3 class="row-label sub-label">Boundary</h3>
+    <div class="row-body">
+      <p>To form a boundary around each cluster, the first step is to 
+        union all polygons together into a single geometry. If they are coincident, most of the work is already done.
+        These simply can be dissolved into a single polygon. If they are not coincident, 
+        in other words, there is small gaps between the polygons, the union
+        will create multi-polygons. To build the wrap around the multi-polygon, I used a reverse-buffer. This is 
+        simply two buffers, one to grow the cluster and one to shrink it back down (using mitre to create orthogonal angles). 
+        An area threshold is used to assess the quality of the boundary. This is used to ensure the boundary 
+        does not introduce too much artifical space around the cluster.
+      </p>
+      <figure class="visual" data-visual="bap-boundary">
+        <div class="visual-bar">
+          <a class="button" href="../visuals/bap-boundary.html" target="_blank" rel="noopener">Open full</a>
+          <button class="visual-reload" type="button">Reload</button>
+        </div>
+        <div class="visual-frame media">
+          <iframe src="../visuals/bap-boundary.html" title="Guided visual: a cluster is grown by epsilon then shrunk by epsilon to make a square-cornered boundary" sandbox="allow-scripts"></iframe>
+        </div>
+        <p class="visual-fallback" hidden>This visual did not load. <a href="../visuals/bap-boundary.html">Open it on its own page.</a></p>
+        <noscript><p class="visual-fallback"><a href="../visuals/bap-boundary.html">Open the visual on its own page.</a></p></noscript>
+      </figure>
     </div>
   </section>
 
@@ -73,5 +129,6 @@
     </div>
   </div>
 </main>
+<script src="../embed.js"></script>
 </body>
 </html>
