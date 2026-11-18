@@ -1,0 +1,172 @@
+<!-- Guided visual: how a score is made. Standalone page; inline style and script are allowed here. -->
+<!-- Numbers come from conservation-dashboard config/scoring.yaml; colors from src/dashboard/app.py. -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>How a score is made</title>
+<style>
+:root { --bg:#344033; --ink:#ece4d2; --muted:#a9b39c; --accent:#d9a441; --line:#4a5946; --map:#2a3328; --low:rgb(255,195,0); --high:rgb(144,12,63); }
+* { box-sizing: border-box; }
+body { margin:0; padding:16px; background:var(--bg); color:var(--ink); font-family:"IBM Plex Mono",monospace; font-size:14px; line-height:1.5; }
+h2 { font-size:14px; margin:0 0 8px; color:var(--accent); }
+section { margin:0 0 20px; }
+.row { display:grid; grid-template-columns:150px 1fr 90px; gap:6px 12px; align-items:center; padding:8px 0; border-bottom:1px solid var(--line); }
+.row label { color:var(--ink); }
+.row .hint { grid-column:1 / -1; color:var(--muted); font-size:12px; margin-top:-4px; }
+.val { text-align:right; }
+input[type=range] { width:100%; accent-color:var(--accent); }
+input[type=range]:focus-visible { outline:2px solid var(--accent); outline-offset:2px; }
+.meter { height:10px; background:var(--map); border:1px solid var(--line); border-radius:2px; overflow:hidden; }
+.meter i { display:block; height:100%; background:var(--accent); width:0; }
+.calc { background:var(--map); border:1px solid var(--line); border-radius:4px; padding:10px 12px; }
+.calc p { margin:0 0 6px; }
+.calc .muted { color:var(--muted); }
+.calc .big { font-size:18px; color:var(--accent); margin:8px 0 0; }
+.ramp-wrap { position:relative; padding-top:26px; }
+.ramp { height:28px; border-radius:3px; border:1px solid var(--line); background:linear-gradient(to right, var(--low), var(--high)); }
+.ticks { display:flex; justify-content:space-between; color:var(--muted); font-size:12px; margin-top:4px; }
+.marker { position:absolute; top:0; width:0; height:54px; border-left:2px solid var(--ink); transform:translateX(-1px); }
+.marker span { position:absolute; top:0; left:6px; white-space:nowrap; background:var(--bg); padding:0 4px; }
+.marker.flip span { left:auto; right:6px; }
+.marker[hidden] { display:none; }
+.blank { display:flex; gap:8px; align-items:center; margin-top:10px; color:var(--muted); font-size:12px; }
+.blank i { width:28px; height:16px; border:1px dashed var(--muted); border-radius:2px; display:inline-block; }
+.swatch { display:inline-block; width:14px; height:14px; border:1px solid var(--ink); vertical-align:-2px; margin-right:6px; }
+.note { color:var(--muted); font-size:12px; margin:12px 0 0; }
+@media (max-width:560px) { .row { grid-template-columns:1fr 90px; } .row input, .row .meter { grid-column:1 / -1; } }
+@media (prefers-reduced-motion: no-preference) { .meter i { transition:width .15s; } .marker { transition:left .15s; } }
+</style>
+</head>
+<body>
+
+<section>
+  <h2>1. Count the sightings nearby</h2>
+  <div class="row">
+    <label for="n">Sightings</label>
+    <input id="n" type="range" min="0" max="8" step="1" value="3">
+    <span class="val" id="n-out"></span>
+    <span class="hint">Five or more counts the same as five. Zero means the square stays blank.</span>
+  </div>
+</section>
+
+<section>
+  <h2>2. Check how close it is to each thing</h2>
+  <div id="layers"></div>
+  <p class="note">Closer means more points. At the cutoff distance or farther, a layer adds nothing.</p>
+</section>
+
+<section>
+  <h2>3. Do the math</h2>
+  <div class="calc" aria-live="polite">
+    <p class="muted" id="mix"></p>
+    <p class="muted" id="dens"></p>
+    <p id="raw"></p>
+    <p class="big" id="final"></p>
+  </div>
+</section>
+
+<section>
+  <h2>4. Find the color</h2>
+  <div class="ramp-wrap">
+    <div class="marker" id="marker"><span id="marker-label"></span></div>
+    <div class="ramp" role="img" aria-label="Color scale from gold at score 1 to deep maroon at score 10"></div>
+    <div class="ticks"><span>1 · lower priority</span><span>10 · higher priority</span></div>
+  </div>
+  <div class="blank"><i></i> No color at all = no sightings, so no score.</div>
+</section>
+
+<p class="note">Example numbers you control. The real values live in the project's scoring config.</p>
+
+<script>
+(function () {
+  document.documentElement.classList.add("js");
+
+  // Same numbers as config/scoring.yaml.
+  var CAP = 5;
+  var BASE = 0.40;
+  var LAYERS = [
+    {key: "habitat",  name: "Critical habitat", w: 0.20, max: 1500, start: 600},
+    {key: "corridor", name: "Wildlife corridor", w: 0.20, max: 1500, start: 900},
+    {key: "trail",    name: "Trail",             w: 0.15, max: 800,  start: 300},
+    {key: "road",     name: "Road",              w: 0.05, max: 800,  start: 500}
+  ];
+  // Same ends as the dashboard's color ramp (src/dashboard/app.py).
+  var LOW = [255, 195, 0], HIGH = [144, 12, 63];
+
+  var layersEl = document.getElementById("layers");
+  var nIn = document.getElementById("n");
+
+  LAYERS.forEach(function (l) {
+    var row = document.createElement("div");
+    row.className = "row";
+    row.innerHTML =
+      '<label for="d-' + l.key + '">' + l.name + '</label>' +
+      '<input id="d-' + l.key + '" type="range" min="0" max="' + (l.max + 500) + '" step="50" value="' + l.start + '">' +
+      '<span class="val" id="o-' + l.key + '"></span>' +
+      '<div class="meter" style="grid-column:1 / -1"><i id="m-' + l.key + '"></i></div>' +
+      '<span class="hint" id="h-' + l.key + '"></span>';
+    layersEl.appendChild(row);
+    l.input = row.querySelector("input");
+  });
+
+  function pct(x) { return Math.round(x * 100); }
+
+  function update() {
+    var n = +nIn.value;
+    document.getElementById("n-out").textContent = n + (n === 1 ? " sighting" : " sightings");
+
+    var mix = BASE, parts = ["0.40 base"];
+    LAYERS.forEach(function (l) {
+      var d = +l.input.value;
+      var prox = Math.max(0, 1 - d / l.max);
+      var pts = l.w * prox;
+      mix += pts;
+      parts.push(pts.toFixed(2) + " " + l.key);
+      document.getElementById("o-" + l.key).textContent = d + " m";
+      document.getElementById("m-" + l.key).style.width = pct(prox) + "%";
+      document.getElementById("h-" + l.key).textContent =
+        pct(prox) + "% close (cutoff " + l.max + " m) × " + pct(l.w) + "% weight = " + pts.toFixed(2) + " points";
+    });
+
+    var dens = Math.min(n / CAP, 1);
+    var raw = 10 * dens * mix;
+
+    document.getElementById("mix").textContent = "Mix = " + parts.join(" + ") + " = " + mix.toFixed(2);
+    document.getElementById("dens").textContent = "Sightings factor = " + Math.min(n, CAP) + " ÷ " + CAP + " = " + dens.toFixed(2);
+
+    var marker = document.getElementById("marker");
+    var final = document.getElementById("final");
+    if (n === 0) {
+      document.getElementById("raw").textContent = "No sightings, so nothing to score.";
+      final.textContent = "Blank square";
+      marker.hidden = true;
+    } else {
+      var score = Math.min(Math.max(raw, 1), 10);
+      var clamped = score !== raw ? " (raised to the minimum of 1)" : "";
+      document.getElementById("raw").textContent = "10 × " + dens.toFixed(2) + " × " + mix.toFixed(2) + " = " + raw.toFixed(1) + clamped;
+      var t = (score - 1) / 9;
+      var rgb = [0, 1, 2].map(function (i) { return Math.round(LOW[i] + t * (HIGH[i] - LOW[i])); });
+      final.innerHTML = '<span class="swatch" style="background:rgb(' + rgb.join(",") + ')"></span>Score ' + score.toFixed(1) + " out of 10";
+      marker.hidden = false;
+      marker.style.left = (t * 100) + "%";
+      marker.classList.toggle("flip", t > 0.8);
+      document.getElementById("marker-label").textContent = score.toFixed(1);
+    }
+    send();
+  }
+
+  function send() {
+    parent.postMessage({type: "visual-height", px: Math.ceil(document.body.offsetHeight)}, "*");
+  }
+
+  nIn.addEventListener("input", update);
+  LAYERS.forEach(function (l) { l.input.addEventListener("input", update); });
+  addEventListener("load", function () { parent.postMessage({type: "visual-ready"}, "*"); send(); });
+  addEventListener("resize", send);
+  update();
+})();
+</script>
+</body>
+</html>

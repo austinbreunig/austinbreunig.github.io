@@ -25,13 +25,29 @@
   <div class="row">
     <div class="row-body">
       <h1 class="project-title">conservation-dashboard</h1>
-      <p class="project-summary">One-line summary goes here. Not written yet.</p>
+      <p class="project-summary">Web map showing weekly moose sightings in Boulder County
+        using Google Cloud Run/Service, Duckdb, and Streamlit.</p>
+      </p>
       <a class="repo-link" href="https://github.com/austinbreunig/conservation-dashboard">github.com/austinbreunig/conservation-dashboard</a>
     </div>
   </div>
   <div class="row">
     <div class="row-body free-block">
-      <p data-placeholder="free block">Your words go here. Not written yet.</p>
+      <p data-placeholder="free block">I don't build too many web maps in my day-to-day work, so 
+        I wanted to explore using GCP to deploy a simple dashboard. This project is a good example
+        of framing a web map, building a pipeline to process and expose the data, and wiring up
+        the infrastructure to host the dashboard. 
+      </p>
+      <p data-placeholder="free block">Moose are a common and beloved wild animal in Boulder County, Colorado.
+        I thought it would be fun to synthetically populate random moose sighting across the county
+        and visualize potential conservation areas for maintaining and restoring critical moose habitats.
+      </p>
+      <p data-placeholder="free block">I applied a grid overlay which introduces a scoring system 
+        to identify areas of high conservation value. The scoring system is based on the presence of
+        wildlife corridors, critical wildlife habitats, and trailheads. The dashboard is designed to be
+        refreshed monthly with new moose sightings and updated scoring.
+      </p> 
+        
     </div>
   </div>
   <section class="row">
@@ -40,10 +56,29 @@
       <p><a class="button" href="https://conservation-dashboard-hjpsz7yrsq-uc.a.run.app">Open the live dashboard</a></p>
       <p>It scales to zero, so it may take a few seconds to wake up.</p>
       <div class="pair">
-        <div class="pair-item media" data-placeholder="screenshot: main map with scored cells and moose points"></div>
-        <div class="pair-item media" data-placeholder="screenshot: how-is-this-calculated note"></div>
+        <div class="pair-item media"><img src="../images/conservation-dashboard/overview-map.png" alt="The dashboard map of western Boulder County: a 500 m grid shaded yellow to brown by conservation score, w
+          ith moose icons over green habitat areas" loading="lazy"></div>
+        <div class="pair-item media"><img src="../images/conservation-dashboard/overview-map2.png" alt="The dashboard map of western Boulder County: a 500 m grid shaded yellow to brown by conservation score, w
+          ith moose icons over green habitat areas" loading="lazy"></div>
       </div>
-      <p data-placeholder="one sentence on how a score is made">How a score is made goes here. Not written yet.</p>
+      <p>Every 500 m square on the map gets a score from 1 to 10. A higher score means a better place to protect moose habitat.</p>
+      <p>A square needs at least one moose sighting to be scored. Without one, it is left blank, because nothing is known about it.</p>
+      <p>The number of sightings sets the size of the score. Five or more sightings counts as the most; extra sightings add nothing.
+        Then the score rises when the square is close to four things: critical habitat, a wildlife corridor, a trail, and a road.
+        Every square with sightings starts with a 40% base. Habitat and corridors add up to 20% each, trails up to 15%, and roads up to 5%.
+        The closer the square is, the more it adds. Past 1,500 m for habitat and corridors, or 800 m for trails and roads, it adds nothing.</p>
+      <p>Try it below. Move the sliders and watch the score and the color change.</p>
+      <figure class="visual" data-visual="how-a-score-is-made">
+        <div class="visual-bar">
+          <a class="button" href="../visuals/how-a-score-is-made.html" target="_blank" rel="noopener">Open full</a>
+          <button class="visual-reload" type="button">Reload</button>
+        </div>
+        <div class="visual-frame media">
+          <iframe src="../visuals/how-a-score-is-made.html" title="Guided visual: sliders for sightings and distance to habitat, corridor, trail and road change a square's score from 1 to 10 and its color from gold to deep maroon" sandbox="allow-scripts"></iframe>
+        </div>
+        <p class="visual-fallback" hidden>This visual did not load. <a href="../visuals/how-a-score-is-made.html">Open it on its own page.</a></p>
+        <noscript><p class="visual-fallback"><a href="../visuals/how-a-score-is-made.html">Open the visual on its own page.</a></p></noscript>
+      </figure>
       <p>The moose sightings are synthetic. The other six layers (trailheads, trail segments, critical wildlife habitats, wildlife corridors, county roads, county boundary) are real Boulder County data.</p>
     </div>
   </section>
@@ -53,7 +88,17 @@
     <div class="row-body">
       <p data-placeholder="pipeline text in the author's words">Pipeline text goes here. Not written yet.</p>
       <p data-placeholder="note for the author: name the tools in your own words: GeoPandas, DuckDB with GeoParquet, Streamlit, Folium, Cloud Run, GCS">Tools to name go here. Not written yet.</p>
-      <div class="media" data-placeholder="visual: layers-to-scores"></div>
+      <figure class="visual" data-visual="layers-to-scores">
+        <div class="visual-bar">
+          <a class="button" href="../visuals/layers-to-scores.html" target="_blank" rel="noopener">Open full</a>
+          <button class="visual-reload" type="button">Reload</button>
+        </div>
+        <div class="visual-frame media">
+          <iframe src="../visuals/layers-to-scores.html" title="Flow diagram: a Cloud Run Job acquires seven layers, normalizes them, builds a 500 m grid, scores it and publishes GeoParquet to Cloud Storage; a Cloud Run service reads it with DuckDB and draws the map with Streamlit and pydeck" sandbox="allow-scripts"></iframe>
+        </div>
+        <p class="visual-fallback" hidden>This visual did not load. <a href="../visuals/layers-to-scores.html">Open it on its own page.</a></p>
+        <noscript><p class="visual-fallback"><a href="../visuals/layers-to-scores.html">Open the visual on its own page.</a></p></noscript>
+      </figure>
     </div>
   </section>
 
@@ -68,7 +113,11 @@
   <section class="row">
     <h2 class="row-label">Architectural Decisions</h2>
     <div class="row-body">
-      <p data-placeholder="architectural decisions in the author's words">Decisions go here. Not written yet.</p>
+      <p data-placeholder="architectural decisions in the author's words">A few basic decisions that 
+        were made up front were based on a few preferences. The first preference was that 
+        I didn't want to manage a server. The second was that I wanted to use Cloud Run and Scheduler to 
+        refresh and host the dashbaord. And
+      </p>
     </div>
   </section>
 
@@ -85,5 +134,6 @@
     </div>
   </div>
 </main>
+<script src="../embed.js"></script>
 </body>
 </html>

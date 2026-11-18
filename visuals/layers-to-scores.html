@@ -1,0 +1,81 @@
+<!-- Guided visual: pipeline flow, layers to scores to map. Standalone page; inline style and script are allowed here. -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Layers to scores</title>
+<style>
+:root { --bg:#344033; --ink:#ece4d2; --muted:#a9b39c; --accent:#d9a441; --accent2:#9fb88a; --line:#4a5946; --map:#2a3328; }
+* { box-sizing: border-box; }
+body { margin:0; padding:16px; background:var(--bg); color:var(--ink); font-family:"IBM Plex Mono",monospace; font-size:14px; line-height:1.5; }
+.band { border:1px dashed var(--line); border-radius:6px; padding:10px 12px 12px; background:var(--map); }
+.band > h2 { font-size:12px; font-weight:600; margin:0 0 10px; color:var(--accent2); text-transform:uppercase; letter-spacing:.04em; }
+.flow { display:flex; align-items:stretch; gap:0; }
+.card { flex:1 1 0; min-width:0; border:1px solid var(--line); border-radius:4px; background:var(--bg); padding:8px 10px; }
+.card h3 { font-size:14px; margin:0 0 4px; }
+.card p { margin:0 0 8px; color:var(--muted); font-size:12px; }
+.chip { display:inline-block; font-size:12px; color:var(--accent); border:1px solid var(--accent); border-radius:3px; padding:0 6px; }
+.arrow { flex:0 0 24px; display:flex; align-items:center; justify-content:center; color:var(--accent2); font-size:18px; }
+.arrow::before { content:"\2192"; }
+.down { text-align:center; color:var(--accent2); font-size:18px; line-height:1.6; }
+.down::before { content:"\2193"; }
+.single { max-width:360px; margin:0 auto; }
+.note { color:var(--muted); font-size:12px; margin:12px 0 0; }
+@media (max-width:640px) {
+  .flow { flex-direction:column; }
+  .arrow { flex:0 0 auto; height:24px; }
+  .arrow::before { content:"\2193"; }
+  .single { max-width:none; }
+}
+</style>
+</head>
+<body>
+
+<div class="band">
+  <h2>Cloud Run Job · runs the pipeline</h2>
+  <div class="flow">
+    <div class="card"><h3>1. Extract</h3><p>Seven layers: six from Boulder County Geospatial Open Data, plus synthetic moose sightings.</p><span class="chip">ArcGIS REST</span></div>
+    <div class="arrow" aria-hidden="true"></div>
+    <div class="card"><h3>2. Normalize</h3><p>Put every layer in one map projection. Drop invalid geometries.</p><span class="chip">GeoPandas</span></div>
+    <div class="arrow" aria-hidden="true"></div>
+    <div class="card"><h3>3. Grid + join</h3><p>Cut the county into 500 m squares. Count sightings and measure distances.</p><span class="chip">GeoPandas</span></div>
+    <div class="arrow" aria-hidden="true"></div>
+    <div class="card"><h3>4. Score</h3><p>Turn counts and distances into a 1 to 10 score.</p><span class="chip">Python + YAML</span></div>
+    <div class="arrow" aria-hidden="true"></div>
+    <div class="card"><h3>5. Publish</h3><p>Write the results to Google Cloud Storage.</p><span class="chip">GeoParquet</span></div>
+  </div>
+</div>
+
+<div class="down" aria-hidden="true"></div>
+
+<div class="band">
+  <h2>Cloud Storage · holds the data</h2>
+  <div class="card single"><h3>Scored grid + layers</h3><p>One bucket is the source of truth. The dashboard reads from here.</p><span class="chip">GeoParquet on GCS</span></div>
+</div>
+
+<div class="down" aria-hidden="true"></div>
+
+<div class="band">
+  <h2>Cloud Run service · serves the map</h2>
+  <div class="flow">
+    <div class="card"><h3>Query</h3><p>Reads the files straight from the bucket. No database to run.</p><span class="chip">DuckDB</span></div>
+    <div class="arrow" aria-hidden="true"></div>
+    <div class="card"><h3>Draw</h3><p>Colors each square by score and adds moose points and other layers.</p><span class="chip">Streamlit + pydeck</span></div>
+    <div class="arrow" aria-hidden="true"></div>
+    <div class="card"><h3>View</h3><p>Anyone opens the map in a browser. It scales to zero when idle.</p><span class="chip">Web map</span></div>
+  </div>
+</div>
+
+<script>
+(function () {
+  function send() {
+    parent.postMessage({type: "visual-height", px: Math.ceil(document.body.offsetHeight)}, "*");
+  }
+  addEventListener("load", function () { parent.postMessage({type: "visual-ready"}, "*"); send(); });
+  addEventListener("resize", send);
+  send();
+})();
+</script>
+</body>
+</html>
