@@ -86,8 +86,6 @@
   <section class="row">
     <h2 class="row-label">The Pipeline</h2>
     <div class="row-body">
-      <p data-placeholder="pipeline text in the author's words">Pipeline text goes here. Not written yet.</p>
-      <p data-placeholder="note for the author: name the tools in your own words: GeoPandas, DuckDB with GeoParquet, Streamlit, Folium, Cloud Run, GCS">Tools to name go here. Not written yet.</p>
       <figure class="visual" data-visual="layers-to-scores">
         <div class="visual-bar">
           <a class="button" href="../visuals/layers-to-scores.html" target="_blank" rel="noopener">Open full</a>
@@ -105,7 +103,11 @@
   <section class="row">
     <h2 class="row-label">Monthly Refresh</h2>
     <div class="row-body">
-      <p data-placeholder="monthly refresh text in the author's words">Monthly refresh text goes here. Not written yet.</p>
+      <p data-placeholder="monthly refresh text in the author's words">Once a month, Cloud Scheduler 
+        triggers the Cloud Run Job, which reruns the pipeline, acquiring the 6 layers,
+        building the synthetic moose sightings, scoring the grid, and then publishing 
+        the final GeoParquets to GCS. 
+      </p>
       <div class="media" data-placeholder="visual: monthly-refresh"></div>
     </div>
   </section>
@@ -113,10 +115,11 @@
   <section class="row">
     <h2 class="row-label">Architectural Decisions</h2>
     <div class="row-body">
-      <p data-placeholder="architectural decisions in the author's words">A few basic decisions that 
-        were made up front were based on a few preferences. The first preference was that 
-        I didn't want to manage a server. The second was that I wanted to use Cloud Run and Scheduler to 
-        refresh and host the dashbaord. And
+      <p data-placeholder="architectural decisions in the author's words">The most important decision that
+        I made up front was that I didn't want to manage a server. Cloud Run runs the entire pipeline and
+        serves the dashboard as soon as it is requested. If traffic stops, after a few minutes it's designed to
+        shut down. This effectively kept the cost of maintaining the dashboard close to zero;
+        the only cost being GCS storage and the pipeline job, which takes a handful of seconds to run.
       </p>
     </div>
   </section>
@@ -124,7 +127,10 @@
   <section class="row">
     <h2 class="row-label">Status</h2>
     <div class="row-body">
-      <p class="status-line" data-placeholder="status text">Status goes here. Not written yet.</p>
+      <p class="status-line" data-placeholder="status text">Currently the map has
+        no interactivity, but I plan to add scoring information to each grid cell as a popup,
+        and labeling to each of the six layers from Boulder County. 
+      </p>
     </div>
   </section>
 
