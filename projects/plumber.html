@@ -25,22 +25,47 @@
   <div class="row">
     <div class="row-body">
       <h1 class="project-title">plumber</h1>
-      <p class="project-summary">A pipeline framework making it easy to wire together a complete and scalable workflow.</p>
+      <p class="project-summary">A pipeline builder making it easy to wire together a complete and scalable workflow.</p>
       <a class="repo-link" href="https://github.com/austinbreunig/plumber">github.com/austinbreunig/plumber</a>
     </div>
   </div>
   <div class="row">
     <div class="row-body free-block">
-      <p>One of the biggest challenges I've faced is scaling a small idea from proof of concept quickly to a reliable and performant pipeline. Many geospatial projects I worked on seem to invariably blend the geospatial processing and business logic with the pipeline machinery itself, creating hard to reverse coupling. The result of this is a pipeline tailored specific to the logic it runs, and if that logic changes the pipeline itself must be changed too. To have a simple to use, simple to understand, and reliable framework which sees the code without affecting it or being effected by it, is the main goal of plumber. Shims or adapters are used to take any codebase and make it compatible with plumber. The idea is that there is a common interface between the code plumber runs and plumber itself. plumber acts as a flexible delivery driver simply running it in the order you define. An easy to define configuration file is used by plumber to state each phase and the order of the workflow. An execution engine is defined here, where the current options are local (sequential running on local machine) and localmp (utilizing local multiprocessing partitioned on a user defined argument). Added execution engines for pyspark and beam will later be added.</p>
-      <p>The input and output functions are your own. plumber writes GeoParquet only for checkpoints and the optional check sample.</p>
+      <p>It is challenging to scale a small 
+        idea from proof of concept to a reliable and performant pipeline. 
+        Many geospatial projects I've worked on seem to invariably blend the geospatial processing and 
+        business logic with the pipeline machinery itself, creating hard to reverse coupling. 
+        The result of this is a pipeline tailored specific to the logic it runs. If that logic 
+        changes, the pipeline must be changed too. 
+        <p>To have a simple to use, simple to understand, 
+        and reliable framework which sees the code without affecting it or being affected by it, is the 
+        main goal of plumber. To acheive this, plumber defines a common interface between the code plumber runs and plumber
+          itself. plumber acts as a sort of flexible delivery driver, simply running your code in the order you define.</p>
+
+          <p>A configuration file is used by plumber to state each phase and the order of the workflow. 
+          An execution engine is defined here as well: the current options are local 
+          (sequential running on local machine) and localmp (utilizing local multiprocessing partitioned on a user defined argument). 
+          Added execution engines for pyspark and beam will later be added.</p>
     </div>
   </div>
 
   <section class="row">
     <h2 class="row-label">The idea</h2>
     <div class="row-body">
-      <p>Shims or adapters are used to take any codebase and make it compatible with plumber.</p>
-      <p data-placeholder="The idea: the phase contract, in the author's words">The idea text goes here. Not written yet.</p>
+      <p>Let's say you want to read in some data, buffer that data, and then write out that data.
+        plumber defines your input, your phase, and your output within the config file. 
+        Each element is your own function, you just need to point plumber to it.</p>
+      
+      <p>plumber requires that the phases follow a specifc interface, which
+        at the core is very simple: a geodataframe in, and a geodataframe out. 
+        A "run" callable is then used to run each phase, outputing an
+        object compatible with the next phase.
+      </p>
+
+      <p>What happens if your code doesn't follow plumber's interface? No problem.
+        Shims are used to adapt your code to plumber's interface. Shims are wrappers
+      to your uncompatible function, reorienting the i/o of the callable.</p>
+
       <pre class="code-block"><code>run(gdf, **params) -&gt; gdf</code></pre>
       <div class="widget" id="pipeline">
         <ul class="widget-fallback">
@@ -53,7 +78,7 @@
   </section>
 
   <section class="row">
-    <h2 class="row-label">A pipeline in 12 lines</h2>
+    <h2 class="row-label">Example</h2>
     <div class="row-body">
       <pre class="code-block"><code>input:
   path: myio:load_roads
